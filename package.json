@@ -1,0 +1,33 @@
+{
+  "name": "english-for-kids",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production",
+    "style": "sass --watch src/style/style.scss dist/style.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SkaymanT/english-for-kids.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SkaymanT/english-for-kids/issues"
+  },
+  "homepage": "https://github.com/SkaymanT/english-for-kids#readme",
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
+    "babel-loader": "^8.1.0",
+    "file-loader": "^6.0.0",
+    "mini-css-extract-plugin": "^0.9.0",
+    "node-sass": "^4.13.1",
+    "sass-loader": "^8.0.2",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
+  }
+}
