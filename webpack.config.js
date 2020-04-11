@@ -1,5 +1,6 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 
 module.exports = (env, options) => {
@@ -10,8 +11,9 @@ module.exports = (env, options) => {
     devtool: isProduction ? 'none' : 'source-map', //подключать source map
     watch: !isProduction,
     entry: {
-      home:'./src/script/home.js',
-      cards: './src/script/cards.js'
+      home: './src/script/home.js',
+      cards: './src/script/cards.js',
+      // style: './src/style/style.scss',
     },
     output: {
       filename: '[name].js',
@@ -30,13 +32,14 @@ module.exports = (env, options) => {
           }
         },
         {
+          test: /\.css$/i,
+          use: ['style-loader', 'css-loader'],
+        },
+        {
           test: /\.s[ac]ss$/i,
           use: [
-            // Creates style nodes from JS strings
             'style-loader',
-            // Translates CSS into CommonJS
             'css-loader',
-            // Compiles Sass to CSS
             'sass-loader',
           ]
         },
@@ -46,10 +49,17 @@ module.exports = (env, options) => {
             loader: 'file-loader',
           }, ],
         },
+        {
+          test: /\.html$/i,
+          loader: 'html-loader',
+        },
       ]
     },
 
     plugins: [
+      new HtmlWebpackPlugin({
+        template: './src/index.html'
+      }), // генерирует html в dist
       // new CleanWebpackPlugin(), //удаляет все лишние файлы
       new MiniCssExtractPlugin({
         filename: 'style.css',
