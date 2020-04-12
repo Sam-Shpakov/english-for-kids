@@ -107,25 +107,29 @@ var Page = /*#__PURE__*/function () {
   function Page() {
     _classCallCheck(this, Page);
 
-    this.isCapsLock = false;
-    this.isShift = false;
+    this.isStatus = false;
   }
 
   _createClass(Page, [{
     key: "createKeyboard",
     value: function createKeyboard() {
+      var ROOT = document.getElementById("root");
+      this.APPCONTAINER = document.createElement("div");
+      this.APPCONTAINER.classList.add("app-container");
+      this.HEADER = document.createElement("div");
+      this.HEADER.classList.add("header-container");
       this.CONTAINER = document.createElement("div");
-      this.TEXTAREA = document.createElement("textarea");
-      this.KEYBOARD = document.createElement("div");
-      this.MANUAL = document.createElement("div");
-      var BODY = document.querySelector("body");
-      this.KEYBOARD.classList.add("keyboard_container");
       this.CONTAINER.classList.add("container");
-      this.MANUAL.classList.add("manual");
-      this.CONTAINER.appendChild(this.MANUAL);
-      this.CONTAINER.appendChild(this.TEXTAREA);
-      this.CONTAINER.appendChild(this.KEYBOARD);
-      BODY.appendChild(this.CONTAINER);
+      this.CONTAINER.classList.add("main-container");
+      this.NAVIGATION = document.createElement("nav");
+      this.NAVIGATION.classList.add("navigation");
+      this.SWITCH = document.createElement("div");
+      this.SWITCH.classList.add("switch-container");
+      this.HEADER.append(this.NAVIGATION);
+      this.HEADER.append(this.SWITCH);
+      this.APPCONTAINER.append(this.HEADER);
+      this.APPCONTAINER.append(this.CONTAINER);
+      ROOT.append(this.APPCONTAINER);
     }
   }]);
 
