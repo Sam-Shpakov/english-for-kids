@@ -1,19 +1,20 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
+
 
 module.exports = (env, options) => {
   const isProduction = options.mode === 'production';
 
   const config = {
-    mode: isProduction ? 'production' : 'development', //Моды
-    devtool: isProduction ? 'none' : 'source-map', //подключать source map
+    mode: isProduction ? 'production' : 'development',
+    devtool: isProduction ? 'none' : 'source-map',
     watch: !isProduction,
     entry: {
       home: './src/script/home.js',
       cards: './src/script/cards.js',
-      // style: './src/style/style.scss',
     },
     output: {
       filename: '[name].js',
@@ -21,8 +22,7 @@ module.exports = (env, options) => {
     },
 
     module: {
-     rules: [
-        {
+      rules: [{
           test: /\.m?js$/,
           exclude: /(node_modules|bower_components)/,
           use: {
@@ -39,7 +39,7 @@ module.exports = (env, options) => {
         {
           test: /\.s[ac]ss$/i,
           use: [
-            'style-loader',
+            MiniCssExtractPlugin.loader,
             'css-loader',
             'sass-loader',
           ]
@@ -57,11 +57,17 @@ module.exports = (env, options) => {
       ]
     },
 
+    devServer: {
+      contentBase: path.join(__dirname, 'dist'),
+      compress: true,
+      port: 9000
+    },
+
     plugins: [
       new HtmlWebpackPlugin({
         template: './src/index.html'
-      }), // генерирует html в dist
-      // new CleanWebpackPlugin(), //удаляет все лишние файлы
+      }),
+      new CleanWebpackPlugin(), 
       new MiniCssExtractPlugin({
         filename: 'style.css',
       }),

@@ -1,6 +1,4 @@
-let welcome = require('./welcome');
-welcome("Suka!");
-
+import '../style/style.scss';
 
 class Page {
   constructor() {
@@ -8,25 +6,29 @@ class Page {
   }
 
   createKeyboard() {
-    const ROOT = document.getElementById("root");
-    this.APPCONTAINER = document.createElement("div");
-    this.APPCONTAINER.classList.add("app-container");
+    const body = document.querySelector('body');
+    this.root = document.createElement('div');
+    this.root.setAttribute('id', 'root');
 
-    this.HEADER = document.createElement("div");
-    this.HEADER.classList.add("header-container");
-    this.CONTAINER = document.createElement("div");
-    this.CONTAINER.classList.add("container");
-    this.CONTAINER.classList.add("main-container");
+    this.appcontainer = document.createElement("div");
+    this.appcontainer.classList.add("app-container");
 
-    this.NAVIGATION = document.createElement("nav");
-    this.NAVIGATION.classList.add("navigation");
-    this.SWITCH = document.createElement("div");
-    this.SWITCH.classList.add("switch-container");
-    this.HEADER.append(this.NAVIGATION);
-    this.HEADER.append(this.SWITCH);
-    this.APPCONTAINER.append(this.HEADER);
-    this.APPCONTAINER.append(this.CONTAINER);
-    ROOT.append(this.APPCONTAINER);
+    this.header = document.createElement("div");
+    this.header.classList.add("header-container");
+    this.container = document.createElement("div");
+    this.container.classList.add("container");
+    this.container.classList.add("main-container");
+
+    this.navigation = document.createElement("nav");
+    this.navigation.classList.add("navigation");
+    this.switch = document.createElement("div");
+    this.switch.classList.add("switch-container");
+    this.header.append(this.navigation);
+    this.header.append(this.switch);
+    this.appcontainer.append(this.header);
+    this.appcontainer.append(this.container);
+    this.root.append(this.appcontainer);
+    body.prepend(this.root);
   }
 
 }

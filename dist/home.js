@@ -90,18 +90,20 @@
 /*!****************************!*\
   !*** ./src/script/home.js ***!
   \****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _style_style_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../style/style.scss */ "./src/style/style.scss");
+/* harmony import */ var _style_style_scss__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_style_style_scss__WEBPACK_IMPORTED_MODULE_0__);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var welcome = __webpack_require__(/*! ./welcome */ "./src/script/welcome.js");
 
-welcome("Suka!");
 
 var Page = /*#__PURE__*/function () {
   function Page() {
@@ -113,23 +115,26 @@ var Page = /*#__PURE__*/function () {
   _createClass(Page, [{
     key: "createKeyboard",
     value: function createKeyboard() {
-      var ROOT = document.getElementById("root");
-      this.APPCONTAINER = document.createElement("div");
-      this.APPCONTAINER.classList.add("app-container");
-      this.HEADER = document.createElement("div");
-      this.HEADER.classList.add("header-container");
-      this.CONTAINER = document.createElement("div");
-      this.CONTAINER.classList.add("container");
-      this.CONTAINER.classList.add("main-container");
-      this.NAVIGATION = document.createElement("nav");
-      this.NAVIGATION.classList.add("navigation");
-      this.SWITCH = document.createElement("div");
-      this.SWITCH.classList.add("switch-container");
-      this.HEADER.append(this.NAVIGATION);
-      this.HEADER.append(this.SWITCH);
-      this.APPCONTAINER.append(this.HEADER);
-      this.APPCONTAINER.append(this.CONTAINER);
-      ROOT.append(this.APPCONTAINER);
+      var body = document.querySelector('body');
+      this.root = document.createElement('div');
+      this.root.setAttribute('id', 'root');
+      this.appcontainer = document.createElement("div");
+      this.appcontainer.classList.add("app-container");
+      this.header = document.createElement("div");
+      this.header.classList.add("header-container");
+      this.container = document.createElement("div");
+      this.container.classList.add("container");
+      this.container.classList.add("main-container");
+      this.navigation = document.createElement("nav");
+      this.navigation.classList.add("navigation");
+      this["switch"] = document.createElement("div");
+      this["switch"].classList.add("switch-container");
+      this.header.append(this.navigation);
+      this.header.append(this["switch"]);
+      this.appcontainer.append(this.header);
+      this.appcontainer.append(this.container);
+      this.root.append(this.appcontainer);
+      body.prepend(this.root);
     }
   }]);
 
@@ -143,17 +148,14 @@ window.onload = function () {
 
 /***/ }),
 
-/***/ "./src/script/welcome.js":
-/*!*******************************!*\
-  !*** ./src/script/welcome.js ***!
-  \*******************************/
+/***/ "./src/style/style.scss":
+/*!******************************!*\
+  !*** ./src/style/style.scss ***!
+  \******************************/
 /*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = function (message) {
-  // alert(`Welcome${message}`);
-  console.log("Welcome ".concat(message));
-};
+// extracted by mini-css-extract-plugin
 
 /***/ })
 
