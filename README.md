@@ -1,3 +1,3 @@
 ### english-for-kids
 
-#### [english-for-kids](https://skaymant.github.io/english-for-kids)
+#### [english-for-kids](https://elastic-franklin-d12bed.netlify.com/)
