@@ -20,11 +20,11 @@ body {
 }
 
 .succes {
-  background-image: url(/static/media/success.3a079626.jpg)
+  background-image: url(/assets/img/success.jpg)
 }
 
 .failure {
-  background-image: url(/static/media/failure.ef048b74.jpg)
+  background-image: url(/assets/img/failure.jpg)
 }
 
 .container {
@@ -112,7 +112,7 @@ body {
   position: absolute;
   width: 50px;
   height: 50px;
-  background-image: url(/static/media/rotate.229f42dc.png);
+  background-image: url(/assets/img/rotate.svg);
   background-size: 32px;
   background-repeat: no-repeat;
   background-position: center 16px;
@@ -121,12 +121,12 @@ body {
   -webkit-transition: .3s;
   transition: .3s;
   -webkit-filter: grayscale(1);
-  filter: grayscale(1)
+  filter: grayscale(1);
 }
 
 .rotate:hover {
   -webkit-filter: none;
-  filter: none
+  filter: none;
 }
 
 .card-container {
@@ -219,7 +219,7 @@ body {
 .repeat {
   width: 65px;
   font-size: 0;
-  background-image: url(/static/media/repeat.d0f11196.svg), linear-gradient(40deg, #ffd86f, #fc6262);
+  background-image: url(/assets/img/repeat.svg), linear-gradient(40deg, #ffd86f, #fc6262);
   border-radius: 50%;
   background-repeat: no-repeat;
   background-size: 32px 32px, cover;
@@ -250,7 +250,7 @@ body {
 }
 
 .star-error {
-  background-image: url(/static/media/star.dc1ba888.svg)
+  background-image: url(/assets/img/star.svg)
 }
 
 .star-error,
@@ -263,7 +263,7 @@ body {
 }
 
 .star-succes {
-  background-image: url(/static/media/star-win.43e453a6.svg)
+  background-image: url(/assets/img/star-win.svg)
 }
 
 @media (max-width:730px) {
@@ -425,7 +425,7 @@ nav {
 .menuToggle input:checked~ul {
   -webkit-transform: scale(1);
   transform: scale(1);
-  opacity: 1
+  opacity: 1;
 }
 
 @media (max-width:1430px) {
@@ -504,7 +504,7 @@ nav {
   display: block;
   display: inline-block;
   // vertical-align: top;
-  width: 126px;
+  width: 120px;
   height: 40px;
   padding: 3px;
   background-color: #fff;
@@ -564,15 +564,15 @@ nav {
 
 .switch-input:checked~.switch-label {
   background: linear-gradient(40deg, #00bf82, #0099ae);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, .15), inset 0 0 3px rgba(0, 0, 0, .2)
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, .15), inset 0 0 3px rgba(0, 0, 0, .2);
 }
 
 .switch-input:checked~.switch-label:before {
-  opacity: 0
+  opacity: 0;
 }
 
 .switch-input:checked~.switch-label:after {
-  opacity: 1
+  opacity: 1;
 }
 
 .switch-handle {
