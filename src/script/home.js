@@ -1,7 +1,7 @@
 import '../style/style.scss';
 import CARDS from './cards.js';
 import Header from './header.js';
-import Main from './main.js';
+import Main from './Main.js';
 import Train from './train.js';
 import Play from './play.js';
 import '../script/cards.js';
@@ -32,7 +32,6 @@ class Page {
 
     this.container = document.createElement('div');
     this.container.classList.add('container');
-    this.container.classList.add('main-container');
 
     this.appcontainer.append(this.header);
     this.appcontainer.append(this.container);
@@ -40,7 +39,7 @@ class Page {
     const header = new Header(this.header);
     header.createHeader();
     const main = new Main(this.container);
-    main.createMain();
+    main.createMain(this.isMode);
     body.prepend(this.root);
   }
 
@@ -149,7 +148,7 @@ class Page {
         let menu = document.querySelectorAll('.menu');
         let cards = document.querySelectorAll('.card');
         for (let i = 0; i < menu.length; i++) {
-          menu[i].classList.remove('green');
+          menu[i].classList.add('green');
         }
         for (let i = 0; i < cards.length; i++) {
           cards[i].classList.remove('card-cover');
@@ -175,8 +174,13 @@ class Page {
     this.container = document.createElement('div');
     this.container.classList.add('container');
     this.appcontainer.append(this.container);
-    const train = new Train(this.container);
-    train.createTrain(this.numberCategory);
+    if (this.isMode) {
+      const train = new Train(this.container);
+      train.createTrain(this.numberCategory);
+    } else {
+      const play = new Play(this.container);
+      play.createPlay(this.numberCategory);
+    }
   }
 
   isClickOnMenu(event) {
@@ -189,19 +193,31 @@ class Page {
     let nameCategory = '';
     let bufNumberCategory = this.numberCategory;
     nameCategory = event.target.innerHTML;
-    this.container.remove();
     this.searchNumberCategoryByName(nameCategory);
     if (bufNumberCategory == this.numberCategory) {
       return;
     }
+    this.container.remove();
     if (this.numberCategory == 0) {
-      console.log('ТЫК ' + this.numberCategory);
-    } else {
       this.container = document.createElement('div');
       this.container.classList.add('container');
       this.appcontainer.append(this.container);
-      const train = new Train(this.container);
-      train.createTrain(this.numberCategory);
+      const main = new Main(this.container);
+      main.createMain(this.isMode);
+    } else {
+      if (this.isMode) {
+        this.container = document.createElement('div');
+        this.container.classList.add('container');
+        this.appcontainer.append(this.container);
+        const train = new Train(this.container);
+        train.createTrain(this.numberCategory);
+      } else {
+        this.container = document.createElement('div');
+        this.container.classList.add('container');
+        this.appcontainer.append(this.container);
+        const play = new Play(this.container);
+        play.createPlay(this.numberCategory);
+      }
     }
   }
 
@@ -210,7 +226,7 @@ class Page {
     CARDS[0].forEach((key, index) => {
       if (key == nameCategory) {
         this.numberCategory = index + 1;
-      } 
+      }
     });
   }
 

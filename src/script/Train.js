@@ -30,7 +30,7 @@ export default class Train {
     });
     keyValue = '<div class="btns"><button class="btn none">Start game</button></div>';
     this.train.insertAdjacentHTML('beforeend', keyValue);
-    keyValue = '<audio class="audio" src="/assets/audio/cry.mp3"></audio>';
+    keyValue = '<audio class="audio"></audio>';
     this.train.insertAdjacentHTML('beforeend', keyValue); 
     keyValue = '<audio class="soundEffects"></audio>';
     this.train.insertAdjacentHTML('beforeend', keyValue); 
