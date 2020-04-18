@@ -47,6 +47,8 @@ class Page {
     const main = new Main(this.container);
     main.createMain(this.isMode);
     body.prepend(this.root);
+    this.arrayAllWords = JSON.parse(localStorage.getItem('arrayAllWords'));
+    console.log(this.arrayAllWords);
   }
 
   addListenersOnKeys() {
@@ -57,6 +59,7 @@ class Page {
 
 
   handlerClick(event) {
+    console.log('Click ' + event);
     if (this.isBlurMenu(event)) {
       this.blurMenu();
     }
@@ -129,6 +132,7 @@ class Page {
   switchModeInMainPage() {
     let menu = document.querySelectorAll('.menu');
     let cards = document.querySelectorAll('.main-card');
+    console.log('choice ' + this.isMode);
     if (this.isMode) {
       document.querySelector('.switch-input').setAttribute('checked', '');
       for (let i = 0; i < menu.length; i++) {
@@ -137,6 +141,7 @@ class Page {
       for (let i = 0; i < cards.length; i++) {
         cards[i].classList.remove('green');
       }
+
     } else {
       document.querySelector('.switch-input').removeAttribute('checked');
       for (let i = 0; i < menu.length; i++) {
@@ -147,10 +152,10 @@ class Page {
       }
     }
   }
-  
+
   switchModeInHackerScope() {
     console.log('Стиль изменен!');
-    }
+  }
 
   switchModeInCategory() {
     if (this.isMode) {
@@ -319,11 +324,31 @@ class Page {
 
   clickOnCard(event) {
     let wordClick = event.target.childNodes[0].innerHTML;
+    
     if (this.isTrain()) {
+      this.addWordInLocalStorageModeTrain(wordClick);
       this.clickOnCardModeTrain(wordClick);
     } else {
+      this.addWordInLocalStorageModePlay(wordClick);
       this.clickOnCardModePlay(wordClick);
     }
+    localStorage.setItem('arrayAllWords', JSON.stringify(this.arrayAllWords));
+  }
+
+  addWordInLocalStorageModeTrain(addWord) {
+    this.arrayAllWords.forEach((key) => {
+      if (key.word == addWord) {
+        key.countTrain++;
+      }
+    });
+  }
+
+  addWordInLocalStorageModePlay(addWord) {
+    this.arrayAllWords.forEach((key) => {
+      if (key.word == addWord) {
+        key.countTrain++;
+      }
+    });
   }
 
   clickOnCardModeTrain(wordClick) {
@@ -341,8 +366,7 @@ class Page {
         if (this.isFinishedWord()) {
           this.showResult();
         }
-      }
-      else {
+      } else {
         this.isWin = false;
         this.changeAfterSelectFailWord(event);
       }
@@ -431,7 +455,9 @@ class Page {
       document.querySelector('body').classList.add('succes');
       document.querySelector('.btns').style.display = 'none';
       document.querySelector('.switch-container').style.display = 'none';
-      setTimeout(() => { this.returnToMain(); }, 5000);
+      setTimeout(() => {
+        this.returnToMain();
+      }, 5000);
     } else {
       document.querySelector('.rating').remove();
       let keyValue = `<div class="rating" style="justify-content: center;">${this.numberErrors} Errors</div>`;
@@ -444,7 +470,9 @@ class Page {
       document.querySelector('body').classList.add('failure');
       document.querySelector('.btns').style.display = 'none';
       document.querySelector('.switch-container').style.display = 'none';
-      setTimeout(() => { this.returnToMain(); }, 5000);
+      setTimeout(() => {
+        this.returnToMain();
+      }, 5000);
     }
   }
 
