@@ -4,6 +4,7 @@ import Header from './header.js';
 import Main from './Main.js';
 import Train from './train.js';
 import Play from './play.js';
+import Statistics from './Statistics.js';
 import '../script/cards.js';
 
 
@@ -53,6 +54,8 @@ class Page {
     document.addEventListener('mouseout', (event) => this.handlerMouseout(event));
   }
 
+
+
   handlerClick(event) {
     if (this.isBlurMenu(event)) {
       this.blurMenu();
@@ -62,12 +65,8 @@ class Page {
       this.switchMode();
     }
 
-    if (this.isClickOnMainCard(event)) {
-      this.clickOnMainCard(event);
-    }
-
-    if (this.isClickOnMainCard(event)) {
-      this.clickOnMainCard(event);
+    if (this.isClickOnСategories(event)) {
+      this.сlickOnСategories(event);
     }
 
     if (this.isClickOnMenu(event)) {
@@ -93,6 +92,8 @@ class Page {
     }
   }
 
+
+
   isBlurMenu(event) {
     if (!event.target.classList.contains('menu') && event.target.tagName !== 'INPUT') {
       return true;
@@ -103,6 +104,8 @@ class Page {
     document.querySelector('.menuToggle>input').checked = false;
   }
 
+
+
   isSwitchMode(event) {
     if (event.target.parentNode.className == 'switch' && event.target.tagName == 'SPAN') {
       return true;
@@ -110,68 +113,87 @@ class Page {
   }
 
   switchMode() {
-    if (this.numberCategory == 0) {
-      let menu = document.querySelectorAll('.menu');
-      let cards = document.querySelectorAll('.main-card');
-      if (this.isMode) {
-        document.querySelector('.switch-input').setAttribute('checked', '');
-        for (let i = 0; i < menu.length; i++) {
-          menu[i].classList.remove('green');
-        }
-        for (let i = 0; i < cards.length; i++) {
-          cards[i].classList.remove('green');
-        }
-      } else {
-        document.querySelector('.switch-input').removeAttribute('checked');
-        for (let i = 0; i < menu.length; i++) {
-          menu[i].classList.add('green');
-        }
-        for (let i = 0; i < cards.length; i++) {
-          cards[i].classList.add('green');
-        }
-      }
-    } else {
-      if (this.isMode) {
-        document.querySelector('.switch-input').setAttribute('checked', '');
-        let button = document.querySelector('.btn');
-        button.classList.remove('none');
-        let menu = document.querySelectorAll('.menu');
-        let cards = document.querySelectorAll('.card');
-        for (let i = 0; i < menu.length; i++) {
-          menu[i].classList.remove('green');
-        }
-        for (let i = 0; i < cards.length; i++) {
-          cards[i].classList.add('card-cover');
-          cards[i].querySelector('.card-header').classList.add('none');
-          cards[i].querySelector('.rotate').classList.add('none');
-        }
-
-      } else {
-        document.querySelector('.switch-input').removeAttribute('checked');
-        let button = document.querySelector('.btn');
-        button.classList.add('none');
-        let menu = document.querySelectorAll('.menu');
-        let cards = document.querySelectorAll('.card');
-        for (let i = 0; i < menu.length; i++) {
-          menu[i].classList.add('green');
-        }
-        for (let i = 0; i < cards.length; i++) {
-          cards[i].classList.remove('card-cover');
-          cards[i].querySelector('.card-header').classList.remove('none');
-          cards[i].querySelector('.rotate').classList.remove('none');
-        }
-      }
+    switch (this.numberCategory) {
+      case 0:
+        this.switchModeInMainPage();
+        break;
+      case 9:
+        this.switchModeInHackerScope();
+        break;
+      default:
+        this.switchModeInCategory();
     }
     this.isMode = !this.isMode;
   }
 
-  isClickOnMainCard(event) {
+  switchModeInMainPage() {
+    let menu = document.querySelectorAll('.menu');
+    let cards = document.querySelectorAll('.main-card');
+    if (this.isMode) {
+      document.querySelector('.switch-input').setAttribute('checked', '');
+      for (let i = 0; i < menu.length; i++) {
+        menu[i].classList.remove('green');
+      }
+      for (let i = 0; i < cards.length; i++) {
+        cards[i].classList.remove('green');
+      }
+    } else {
+      document.querySelector('.switch-input').removeAttribute('checked');
+      for (let i = 0; i < menu.length; i++) {
+        menu[i].classList.add('green');
+      }
+      for (let i = 0; i < cards.length; i++) {
+        cards[i].classList.add('green');
+      }
+    }
+  }
+  
+  switchModeInHackerScope() {
+    console.log('Стиль изменен!');
+    }
+
+  switchModeInCategory() {
+    if (this.isMode) {
+      document.querySelector('.switch-input').setAttribute('checked', '');
+      let button = document.querySelector('.btn');
+      button.classList.remove('none');
+      let menu = document.querySelectorAll('.menu');
+      let cards = document.querySelectorAll('.card');
+      for (let i = 0; i < menu.length; i++) {
+        menu[i].classList.remove('green');
+      }
+      for (let i = 0; i < cards.length; i++) {
+        cards[i].classList.add('card-cover');
+        cards[i].querySelector('.card-header').classList.add('none');
+        cards[i].querySelector('.rotate').classList.add('none');
+      }
+
+    } else {
+      document.querySelector('.switch-input').removeAttribute('checked');
+      let button = document.querySelector('.btn');
+      button.classList.add('none');
+      let menu = document.querySelectorAll('.menu');
+      let cards = document.querySelectorAll('.card');
+      for (let i = 0; i < menu.length; i++) {
+        menu[i].classList.add('green');
+      }
+      for (let i = 0; i < cards.length; i++) {
+        cards[i].classList.remove('card-cover');
+        cards[i].querySelector('.card-header').classList.remove('none');
+        cards[i].querySelector('.rotate').classList.remove('none');
+      }
+    }
+  }
+
+
+
+  isClickOnСategories(event) {
     if (event.target.parentNode.classList.contains('main-card') || event.target.classList.contains('main-card')) {
       return true;
     }
   }
 
-  clickOnMainCard(event) {
+  сlickOnСategories(event) {
     let nameCategory = '';
     event.target.tagName == 'IMG' ? nameCategory = event.target.getAttribute('alt') : nameCategory = event.target.childNodes[0].getAttribute('alt');
     this.container.remove();
@@ -188,6 +210,8 @@ class Page {
     }
   }
 
+
+
   isClickOnMenu(event) {
     if (event.target.parentNode.classList.contains('header-item') || event.target.classList.contains('header-item')) {
       return true;
@@ -198,41 +222,82 @@ class Page {
     let nameCategory = '';
     let bufNumberCategory = this.numberCategory;
     nameCategory = event.target.innerHTML;
+    this.controlActiveItem(event);
     this.searchNumberCategoryByName(nameCategory);
     if (bufNumberCategory == this.numberCategory) {
       return;
     }
     this.container.remove();
-    if (this.numberCategory == 0) {
-      this.createContainer('Main');
-    } else {
-      if (this.isMode) {
-        this.createContainer('Train');
-      } else {
-        this.createContainer('Play');
+    switch (this.numberCategory) {
+      case 0:
+        this.createContainer('Main');
+        break;
+      case 9:
+        this.createContainer('Statistics');
+        break;
+      default: {
+        if (this.isTrain()) {
+          this.createContainer('Train');
+        } else {
+          this.createContainer('Play');
+        }
       }
+
     }
   }
 
+  isTrain() {
+    if (this.isMode) {
+      return true;
+    }
+  }
+
+
+  controlActiveItem(event) {
+    let menuItems = document.querySelectorAll('.header-item');
+    for (let i = 0; i < menuItems.length; i++) {
+      menuItems[i].classList.remove('active');
+    }
+    event.target.classList.add('active');
+  }
+
   createContainer(NameContainer) {
-    if (NameContainer == 'Main') {
-      this.container = document.createElement('div');
-      this.container.classList.add('container');
-      this.appcontainer.append(this.container);
-      const main = new Main(this.container);
-      main.createMain(this.isMode);
-    } else if (NameContainer == 'Train') {
-      this.container = document.createElement('div');
-      this.container.classList.add('container');
-      this.appcontainer.append(this.container);
-      const train = new Train(this.container);
-      train.createTrain(this.numberCategory);
-    } else if (NameContainer == 'Play') {
-      this.container = document.createElement('div');
-      this.container.classList.add('container');
-      this.appcontainer.append(this.container);
-      const play = new Play(this.container);
-      play.createPlay(this.numberCategory);
+    switch (NameContainer) {
+      case 'Main': {
+        this.container = document.createElement('div');
+        this.container.classList.add('container');
+        this.appcontainer.append(this.container);
+        const main = new Main(this.container);
+        main.createMain(this.isMode);
+        break;
+      }
+
+      case 'Train': {
+        this.container = document.createElement('div');
+        this.container.classList.add('container');
+        this.appcontainer.append(this.container);
+        const train = new Train(this.container);
+        train.createTrain(this.numberCategory);
+        break;
+      }
+
+      case 'Play': {
+        this.container = document.createElement('div');
+        this.container.classList.add('container');
+        this.appcontainer.append(this.container);
+        const play = new Play(this.container);
+        play.createPlay(this.numberCategory);
+        break;
+      }
+
+      case 'Statistics': {
+        this.container = document.createElement('div');
+        this.container.classList.add('container');
+        this.appcontainer.append(this.container);
+        const statistics = new Statistics(this.container);
+        statistics.createStatistics(this.numberCategory);
+        break;
+      }
     }
   }
 
@@ -245,9 +310,43 @@ class Page {
     });
   }
 
+
+
   isClickOnCard(event) {
     if ((event.target.parentNode.classList.contains('front') && !event.target.classList.contains('rotate')) || event.target.classList.contains('front')) {
       return true;
+    }
+  }
+
+  clickOnCard(event) {
+    let wordClick = event.target.childNodes[0].innerHTML;
+    if (this.isTrain()) {
+      this.clickOnCardModeTrain(wordClick);
+    } else {
+      this.clickOnCardModePlay(wordClick);
+    }
+  }
+
+  clickOnCardModeTrain(wordClick) {
+    let src = 'assets/';
+    src += this.searchCardByWord(wordClick);
+    let audio = document.querySelector('.audio');
+    audio.setAttribute('src', src);
+    audio.play();
+  }
+
+  clickOnCardModePlay(wordClick) {
+    if (this.isStartGame) {
+      if (this.isTrueWord(wordClick)) {
+        this.changeAfterSelectTrueWord();
+        if (this.isFinishedWord()) {
+          this.showResult();
+        }
+      }
+      else {
+        this.isWin = false;
+        this.changeAfterSelectFailWord(event);
+      }
     }
   }
 
@@ -259,40 +358,6 @@ class Page {
       }
     });
     return src;
-  }
-
-  clickOnCardModeTrain(wordClick) {
-    let src = 'assets/';
-    src += this.searchCardByWord(wordClick);
-    let audio = document.querySelector('.audio');
-    audio.setAttribute('src', src);
-    audio.play();
-  }
-
-  clickOnCard(event) {
-    let wordClick = event.target.childNodes[0].innerHTML;
-    if (this.isTrain()) {
-      this.clickOnCardModeTrain(wordClick);
-    } else {
-      if (this.isStartGame) {
-        if (this.isTrueWord(wordClick)) {
-          this.changeAfterSelectTrueWord();
-          if (this.isFinishedWord()) {
-            this.showResult();
-          }
-        }
-        else {
-          this.isWin = false;
-          this.changeAfterSelectFailWord();
-        }
-      }
-    }
-  }
-
-  isTrain() {
-    if (this.isMode) {
-      return true;
-    }
   }
 
   isTrueWord(wordClick) {
@@ -335,16 +400,24 @@ class Page {
 
   }
 
-  changeAfterSelectFailWord() {
-    let src = 'assets/audio/error.mp3';
-    this.numberErrors++;
-    console.log(this.numberErrors);
-    let audio = document.querySelector('.audio');
-    audio.setAttribute('src', src);
-    audio.play();
-    let keyValue = '<div class="star-error"></div>';
-    document.querySelector('.rating').classList.remove('none');
-    document.querySelector('.rating').insertAdjacentHTML('beforeend', keyValue);
+  changeAfterSelectFailWord(event) {
+    if (this.checkInactiveCard(event)) {
+      let src = 'assets/audio/error.mp3';
+      this.numberErrors++;
+      console.log(this.numberErrors);
+      let audio = document.querySelector('.audio');
+      audio.setAttribute('src', src);
+      audio.play();
+      let keyValue = '<div class="star-error"></div>';
+      document.querySelector('.rating').classList.remove('none');
+      document.querySelector('.rating').insertAdjacentHTML('beforeend', keyValue);
+    }
+  }
+
+  checkInactiveCard(event) {
+    if (!event.target.classList.contains('inactive')) {
+      return true;
+    }
   }
 
   showResult() {
@@ -353,14 +426,13 @@ class Page {
       let keyValue = '<div class="rating" style="justify-content: center;">Win!</div>';
       this.container.insertAdjacentHTML('beforebegin', keyValue);
       let cards = document.querySelectorAll('.card');
-      console.log('showResult' + cards[0].classList);
       for (let i = 0; i < cards.length; i++) {
         cards[i].style.display = 'none';
       }
       document.querySelector('body').classList.add('succes');
       document.querySelector('.btns').style.display = 'none';
       document.querySelector('.switch-container').style.display = 'none';
-      setTimeout(() => { this.returnToMain(); }, 1000);
+      setTimeout(() => { this.returnToMain(); }, 5000);
     } else {
       document.querySelector('.rating').remove();
       let keyValue = `<div class="rating" style="justify-content: center;">${this.numberErrors} Errors</div>`;
@@ -373,7 +445,7 @@ class Page {
       document.querySelector('body').classList.add('failure');
       document.querySelector('.btns').style.display = 'none';
       document.querySelector('.switch-container').style.display = 'none';
-      setTimeout(() => { this.returnToMain(); }, 1000);
+      setTimeout(() => { this.returnToMain(); }, 5000);
     }
   }
 
@@ -392,6 +464,7 @@ class Page {
   }
 
 
+
   isClickOnRotate(event) {
     if (event.target.classList.contains('rotate')) {
       return true;
@@ -401,6 +474,8 @@ class Page {
   clickOnRotate(event) {
     event.target.parentNode.classList.add('translate');
   }
+
+
 
   isClickOnButtonStartGame(event) {
     if (event.target.classList.contains('btn')) {
