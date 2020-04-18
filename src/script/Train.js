@@ -5,11 +5,11 @@ export default class Train {
     this.train = train;
   }
 
-  createTrain(category) {
+  createTrain(numCategory) {
     let keyValue = '<div class="rating none"></div>';
     this.train.insertAdjacentHTML('beforeend', keyValue);
-    CARDS[category].forEach((key, index) => {
-      let card = CARDS[category][index];
+    CARDS[numCategory].forEach((key, index) => {
+      let card = CARDS[numCategory][index];
       let link = './assets/';
       let word = '';
       let translation = '';

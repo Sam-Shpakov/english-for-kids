@@ -242,7 +242,6 @@ class Page {
           this.createContainer('Play');
         }
       }
-
     }
   }
 

@@ -5,11 +5,11 @@ export default class Play {
     this.play = play;
   }
 
-  createPlay(category) {
+  createPlay(numCategory) {
     let keyValue = '<div class="rating none"></div>';
     this.play.insertAdjacentHTML('beforeend', keyValue);
-    CARDS[category].forEach((key, index) => {
-      let card = CARDS[category][index];
+    CARDS[numCategory].forEach((key, index) => {
+      let card = CARDS[numCategory][index];
       let link = './assets/';
       let word = '';
       let translation = '';
