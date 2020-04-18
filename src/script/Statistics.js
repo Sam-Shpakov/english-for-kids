@@ -15,7 +15,7 @@ export default class Statistics {
     table.setAttribute('wight', "100%");
     let tableBody = document.createElement("tbody");
     for (let i = 0; i < this.arrayAllWords.length; i++) {
-      if (i = 0) {
+      if (i == 0) {
         let head = document.createElement("tr");
         let headCell = document.createElement('td');
         let headCellText = document.createTextNode('Word');
