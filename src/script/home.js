@@ -605,6 +605,7 @@ class Page {
 
   clickOnButtonStartGame(event) {
     if (!event.target.classList.contains('repeat')) {
+      this.numberErrors = 0;
       event.target.classList.add('repeat');
       if (this.numberCategory != 9) {
         this.randomWordsFrom(CARDS[this.numberCategory]);
