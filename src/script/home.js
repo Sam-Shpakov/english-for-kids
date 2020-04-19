@@ -4,6 +4,7 @@ import Header from './header.js';
 import Main from './Main.js';
 import Train from './train.js';
 import Play from './play.js';
+import Difficult from './Difficult.js';
 import Statistics from './Statistics.js';
 import '../script/cards.js';
 
@@ -46,18 +47,20 @@ class Page {
     const main = new Main(this.container);
     main.createMain(this.isMode);
     body.prepend(this.root);
+    this.allWords = JSON.parse(localStorage.getItem('allWords'));
+    if (this.allWords == null) {
+      this.createLocalStorage();
+    }
   }
 
   addListenersOnKeys() {
     document.addEventListener('click', (event) => this.handlerClick(event));
     document.addEventListener('mouseout', (event) => this.handlerMouseout(event));
-
   }
 
 
 
   handlerClick(event) {
-    console.log('Click ' + event);
     if (this.isBlurMenu(event)) {
       this.blurMenu();
     }
@@ -84,6 +87,19 @@ class Page {
 
     if (this.isClickOnButtonStartGame(event)) {
       this.clickOnButtonStartGame(event);
+    }
+
+    if (this.isClickOnButtonReset(event)) {
+      this.clickOnButtonReset();
+    }
+
+    if (this.isClickOnButtonRepeatDifWord(event)) {
+      this.clickOnButtonRepeatDifWord();
+    }
+
+
+    if (this.isClickOnTheadTable(event)) {
+      this.clickOnTheadTable(event);
     }
   }
 
@@ -118,9 +134,6 @@ class Page {
       case 0:
         this.switchModeInMainPage();
         break;
-      case 9:
-        this.switchModeInHackerScope();
-        break;
       default:
         this.switchModeInCategory();
     }
@@ -130,7 +143,6 @@ class Page {
   switchModeInMainPage() {
     let menu = document.querySelectorAll('.menu');
     let cards = document.querySelectorAll('.main-card');
-    console.log('choice ' + this.isMode);
     if (this.isMode) {
       document.querySelector('.switch-input').setAttribute('checked', '');
       for (let i = 0; i < menu.length; i++) {
@@ -151,10 +163,6 @@ class Page {
     }
   }
 
-  switchModeInHackerScope() {
-    console.log('Стиль изменен!');
-  }
-
   switchModeInCategory() {
     if (this.isMode) {
       document.querySelector('.switch-input').setAttribute('checked', '');
@@ -162,6 +170,9 @@ class Page {
       button.classList.remove('none');
       let menu = document.querySelectorAll('.menu');
       let cards = document.querySelectorAll('.card');
+      document.querySelector('.rating').remove();
+      let keyValue = '<div class="rating"></div>';
+      document.querySelector('.container').insertAdjacentHTML('afterbegin', keyValue);
       for (let i = 0; i < menu.length; i++) {
         menu[i].classList.remove('green');
       }
@@ -175,6 +186,14 @@ class Page {
       document.querySelector('.switch-input').removeAttribute('checked');
       let button = document.querySelector('.btn');
       button.classList.add('none');
+      button.classList.remove('repeat');
+      let front = document.querySelectorAll('.front');
+      for (let i = 0; i < front.length; i++) {
+        front[i].classList.remove('inactive');
+      }
+      document.querySelector('.rating').remove();
+      let keyValue = '<div class="rating none"></div>';
+      document.querySelector('.container').insertAdjacentHTML('afterbegin', keyValue);
       let menu = document.querySelectorAll('.menu');
       let cards = document.querySelectorAll('.card');
       for (let i = 0; i < menu.length; i++) {
@@ -227,9 +246,11 @@ class Page {
     nameCategory = event.target.innerHTML;
     this.controlActiveItem(event);
     this.searchNumberCategoryByName(nameCategory);
-    if (bufNumberCategory == this.numberCategory) {
+    if (bufNumberCategory == this.numberCategory && this.numberCategory != 9) {
       return;
     }
+    document.querySelector('.switch-container').style.display = 'block';
+    this.container = document.querySelector('.container');
     this.container.remove();
     switch (this.numberCategory) {
       case 0:
@@ -298,7 +319,7 @@ class Page {
         this.appcontainer.append(this.container);
         const statistics = new Statistics(this.container);
         statistics.createStatistics();
-
+        this.isMode = true;
         break;
       }
     }
@@ -363,24 +384,24 @@ class Page {
   clickOnCardModePlay(wordClick) {
     if (this.isStartGame()) {
       if (this.isTrueWord(wordClick)) {
-        this.addWordInLocalStorageModePlayGuess(wordClick);
+        this.addWordInLocalStorageModePlayGuess(this.trueWord);
         this.changeAfterSelectTrueWord();
         if (this.isFinishedWord()) {
           this.showResult();
         }
       } else {
         this.isWin = false;
-        this.changeAfterSelectFailWord(event, wordClick);
+        this.changeAfterSelectFailWord(event, this.trueWord);
       }
     }
   }
 
-  isStartGame(){
-    if(document.querySelector('.btn').classList.contains('repeat')){
+  isStartGame() {
+    if (document.querySelector('.btn').classList.contains('repeat')) {
       return true;
     }
   }
-  
+
 
   addWordInLocalStorageModeTrain(addWord) {
     this.allWords = JSON.parse(localStorage.getItem('allWords'));
@@ -412,7 +433,6 @@ class Page {
         }
       });
     } else {
-      console.log(this.allWords);
       this.allWords.forEach((key) => {
         if (key.word == addWord) {
           key.guessPlay++;
@@ -434,7 +454,6 @@ class Page {
         }
       });
     } else {
-      console.log(this.allWords);
       this.allWords.forEach((key) => {
         if (key.word == addWord) {
           key.ErrorsPlay++;
@@ -447,9 +466,13 @@ class Page {
 
   searchCardByWord(word) {
     let src = '';
-    CARDS[this.numberCategory].forEach((key) => {
-      if (key.word == word) {
-        src = key.audioSrc;
+    CARDS.forEach((keyCategory, numCategory) => {
+      if (numCategory != 0) {
+        CARDS[numCategory].forEach((key) => {
+          if (key.word == word) {
+            src = key.audioSrc;
+          }
+        });
       }
     });
     return src;
@@ -473,7 +496,6 @@ class Page {
     audio.setAttribute('src', src);
     audio.play();
     this.arrayWordsForGame.shift();
-    console.log('Click ' + this.trueWord);
     this.trueWord = this.arrayWordsForGame[0];
     let trueWord = this.trueWord;
     let newSrc = 'assets/';
@@ -500,7 +522,6 @@ class Page {
       this.addWordInLocalStorageModePlayError(wordClick);
       let src = 'assets/audio/error.mp3';
       this.numberErrors++;
-      console.log(this.numberErrors);
       let audio = document.querySelector('.audio');
       audio.setAttribute('src', src);
       audio.play();
@@ -520,6 +541,7 @@ class Page {
     if (this.isWin) {
       document.querySelector('.rating').remove();
       let keyValue = '<div class="rating" style="justify-content: center;">Win!</div>';
+      this.container = document.querySelector('.container');
       this.container.insertAdjacentHTML('beforebegin', keyValue);
       let cards = document.querySelectorAll('.card');
       for (let i = 0; i < cards.length; i++) {
@@ -530,13 +552,13 @@ class Page {
       document.querySelector('.switch-container').style.display = 'none';
       setTimeout(() => {
         this.returnToMain();
-      }, 5000);
+      }, 3000);
     } else {
       document.querySelector('.rating').remove();
       let keyValue = `<div class="rating" style="justify-content: center;">${this.numberErrors} Errors</div>`;
+      this.container = document.querySelector('.container');
       this.container.insertAdjacentHTML('beforebegin', keyValue);
       let cards = document.querySelectorAll('.card');
-      console.log('showResult' + cards[0].classList);
       for (let i = 0; i < cards.length; i++) {
         cards[i].style.display = 'none';
       }
@@ -545,7 +567,7 @@ class Page {
       document.querySelector('.switch-container').style.display = 'none';
       setTimeout(() => {
         this.returnToMain();
-      }, 5000);
+      }, 3000);
     }
   }
 
@@ -581,21 +603,16 @@ class Page {
     }
   }
 
-  randomWordsFromCategory() {
-    this.arrayWordsForGame = [];
-    CARDS[this.numberCategory].forEach((key) => {
-      this.arrayWordsForGame.push(key.word);
-    });
-    this.arrayWordsForGame.sort(() => Math.random() - 0.5);
-  }
-
   clickOnButtonStartGame(event) {
     if (!event.target.classList.contains('repeat')) {
       event.target.classList.add('repeat');
-      this.randomWordsFromCategory();
+      if (this.numberCategory != 9) {
+        this.randomWordsFrom(CARDS[this.numberCategory]);
+      } else {
+        this.randomWordsFrom(this.difficultWords);
+      }
       this.trueWord = this.arrayWordsForGame[0];
       let src = 'assets/';
-      console.log(this.trueWord);
       src += this.searchCardByWord(this.trueWord);
       let audio = document.querySelector('.audio');
       audio.setAttribute('src', src);
@@ -603,7 +620,6 @@ class Page {
       this.isWin = true;
     } else {
       let src = 'assets/';
-      console.log(this.trueWord);
       src += this.searchCardByWord(this.trueWord);
       let audio = document.querySelector('.audio');
       audio.setAttribute('src', src);
@@ -611,12 +627,59 @@ class Page {
     }
   }
 
+  randomWordsFrom(array) {
+    this.arrayWordsForGame = [];
+    array.forEach((key) => {
+      this.arrayWordsForGame.push(key.word);
+    });
+    this.arrayWordsForGame.sort(() => Math.random() - 0.5);
+  }
+
+
+
+
+  isClickOnButtonReset(event) {
+    if (event.target.id == ('resetButton')) {
+      return true;
+    }
+  }
+
+  clickOnButtonReset() {
+    this.container.remove();
+    this.container = document.createElement('div');
+    this.container.classList.add('container');
+    this.appcontainer.append(this.container);
+    const statistics = new Statistics(this.container);
+    statistics.resetAllWords();
+    statistics.createStatistics();
+  }
+
+  isClickOnButtonRepeatDifWord(event) {
+    if (event.target.id == ('repeatButton')) {
+      return true;
+    }
+  }
+
+  clickOnButtonRepeatDifWord() {
+    const difficult = new Difficult();
+    this.difficultWords = difficult.createDifficult();
+  }
+
+  isClickOnTheadTable(event) {
+    if (event.target.classList.contains('tableTh')) {
+      return true;
+    }
+  }
+
+  clickOnTheadTable(event) {
+    const statistics = new Statistics(this.container);
+    statistics.getSortTable(event.target);
+  }
 
 
 
   isMouseoutCard(event) {
     if ((event.target.classList.contains('rotate') && !event.relatedTarget.classList.contains('back')) || event.target.classList.contains('card-container') || event.target.classList.contains('card') || event.target.classList.contains('front') || event.target.classList.contains('back')) {
-
       return true;
     }
   }

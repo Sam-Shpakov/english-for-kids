@@ -1,5 +1,5 @@
 const cards = [ 
-  ['Action (set A)', 'Action (set B)', 'Action (set C)', 'Adjective', 'Animal (set A)', 'Animal (set B)', 'Clothes', 'Emotions', 'Statistics'],
+  ['Action (set A)', 'Action (set B)', 'Action (set C)', 'Adjective', 'Animal (set A)', 'Animal (set B)', 'Clothes', 'Emotion', 'Statistics'],
   [
     {
       word: 'cry',
@@ -264,7 +264,7 @@ const cards = [
       audioSrc: 'audio/bird.mp3'
     },
     {
-      word: 'fish',
+      word: 'fish ',
       translation: 'рыба',
       image: 'img/fish1.jpg',
       audioSrc: 'audio/fish.mp3'
