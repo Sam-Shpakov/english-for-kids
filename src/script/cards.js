@@ -102,66 +102,116 @@ const cards = [
   ],
   [
     {
-      word: 'cry',
-      translation: 'плакать',
-      image: 'img/cry.jpg',
-      audioSrc: 'audio/cry.mp3'
+      word: 'argue',
+      translation: 'спорить',
+      image: 'img/argue.jpg',
+      audioSrc: 'audio/argue.mp3'
     },
     {
-      word: 'dive',
-      translation: 'нырять',
-      image: 'img/dive.jpg',
-      audioSrc: 'audio/dive.mp3'
+      word: 'drop',
+      translation: 'падать',
+      image: 'img/drop.jpg',
+      audioSrc: 'audio/drop.mp3'
     },
     {
-      word: 'dance',
-      translation: 'танцевать',
-      image: 'img/dance.jpg',
-      audioSrc: 'audio/dance.mp3'
+      word: 'build',
+      translation: 'строить',
+      image: 'img/build.jpg',
+      audioSrc: 'audio/build.mp3'
     },
     {
-      word: 'draw',
-      translation: 'рисовать',
-      image: 'img/draw.jpg',
-      audioSrc: 'audio/draw.mp3'
+      word: 'carry',
+      translation: 'нести',
+      image: 'img/carry.jpg',
+      audioSrc: 'audio/carry.mp3'
     },
     {
-      word: 'fish',
-      translation: 'ловить рыбу',
-      image: 'img/fish.jpg',
-      audioSrc: 'audio/fish.mp3'
+      word: 'catch',
+      translation: 'ловить',
+      image: 'img/catch.jpg',
+      audioSrc: 'audio/catch.mp3'
     },
     {
-      word: 'fly',
-      translation: 'летать',
-      image: 'img/fly.jpg',
-      audioSrc: 'audio/fly.mp3'
+      word: 'drive',
+      translation: 'водить машину',
+      image: 'img/drive.jpg',
+      audioSrc: 'audio/drive.mp3'
     },
     {
-      word: 'hug',
-      translation: 'обнимать',
-      image: 'img/hug.jpg',
-      audioSrc: 'audio/hug.mp3'
+      word: 'pull',
+      translation: 'тянуть',
+      image: 'img/pull.jpg',
+      audioSrc: 'audio/pull.mp3'
     },
     {
-      word: 'jump',
-      translation: 'прыгать',
-      image: 'img/jump.jpg',
-      audioSrc: 'audio/jump.mp3'
+      word: 'push',
+      translation: 'толкать',
+      image: 'img/push.jpg',
+      audioSrc: 'audio/push.mp3'
     }
   ],
   [
     {
-      word: 'cat',
-      translation: 'кот',
-      image: 'img/cat.jpg',
-      audioSrc: 'audio/cat.mp3'
+      word: 'big',
+      translation: 'большой',
+      image: 'img/big.jpg',
+      audioSrc: 'audio/big.mp3'
     },
+    {
+      word: 'friendly',
+      translation: 'дружелюбный',
+      image: 'img/friendly.jpg',
+      audioSrc: 'audio/friendly.mp3'
+    },
+    {
+      word: 'small',
+      translation: 'маленький',
+      image: 'img/small.jpg',
+      audioSrc: 'audio/small.mp3'
+    },
+    {
+      word: 'fast',
+      translation: 'быстрый',
+      image: 'img/fast.jpg',
+      audioSrc: 'audio/fast.mp3'
+    },
+    {
+      word: 'slow',
+      translation: 'медленный',
+      image: 'img/slow.jpg',
+      audioSrc: 'audio/slow.mp3'
+    },
+    {
+      word: 'unfriendly',
+      translation: 'недружелюбный',
+      image: 'img/unfriendly.jpg',
+      audioSrc: 'audio/unfriendly.mp3'
+    },
+    {
+      word: 'young',
+      translation: 'молодой',
+      image: 'img/young.jpg',
+      audioSrc: 'audio/young.mp3'
+    },
+    {
+      word: 'old',
+      translation: 'старый',
+      image: 'img/old.jpg',
+      audioSrc: 'audio/old.mp3'
+    }
+  ],
+  [
     {
       word: 'chick',
       translation: 'цыплёнок',
       image: 'img/chick.jpg',
       audioSrc: 'audio/chick.mp3'
+    },
+    {
+      word: 'cat',
+      translation: 'кот',
+      image: 'img/cat.jpg',
+      audioSrc: 'audio/cat.mp3'
     },
     {
       word: 'chicken',
@@ -202,66 +252,16 @@ const cards = [
   ],
   [
     {
-      word: 'bird',
-      translation: 'птица',
-      image: 'img/bird.jpg',
-      audioSrc: 'audio/bird.mp3'
-    },
-    {
-      word: 'fish',
-      translation: 'рыба',
-      image: 'img/fish1.jpg',
-      audioSrc: 'audio/fish1.mp3'
-    },
-    {
       word: 'frog',
       translation: 'жаба',
       image: 'img/frog.jpg',
       audioSrc: 'audio/frog.mp3'
     },
     {
-      word: 'giraffe',
-      translation: 'жирафа',
-      image: 'img/giraffe.jpg',
-      audioSrc: 'audio/giraffe.mp3'
-    },
-    {
-      word: 'lion',
-      translation: 'лев',
-      image: 'img/lion.jpg',
-      audioSrc: 'audio/lion.mp3'
-    },
-    {
-      word: 'mouse',
-      translation: 'мышь',
-      image: 'img/mouse.jpg',
-      audioSrc: 'audio/mouse.mp3'
-    },
-    {
-      word: 'turtle',
-      translation: 'черепаха',
-      image: 'img/turtle.jpg',
-      audioSrc: 'audio/turtle.mp3'
-    },
-    {
-      word: 'dolphin',
-      translation: 'дельфин',
-      image: 'img/dolphin.jpg',
-      audioSrc: 'audio/dolphin.mp3'
-    }
-  ],
-  [
-    {
       word: 'bird',
       translation: 'птица',
       image: 'img/bird.jpg',
       audioSrc: 'audio/bird.mp3'
-    },
-    {
-      word: 'frog',
-      translation: 'жаба',
-      image: 'img/frog.jpg',
-      audioSrc: 'audio/frog.mp3'
     },
     {
       word: 'fish',
@@ -308,16 +308,16 @@ const cards = [
       audioSrc: 'audio/skirt.mp3'
     },
     {
-      word: 'pants',
-      translation: 'брюки',
-      image: 'img/pants.jpg',
-      audioSrc: 'audio/pants.mp3'
-    },
-    {
       word: 'blouse',
       translation: 'блузка',
       image: 'img/blouse.jpg',
       audioSrc: 'audio/blouse.mp3'
+    },
+    {
+      word: 'pants',
+      translation: 'брюки',
+      image: 'img/pants.jpg',
+      audioSrc: 'audio/pants.mp3'
     },
     {
       word: 'dress',
@@ -358,6 +358,12 @@ const cards = [
       audioSrc: 'audio/sad.mp3'
     },
     {
+      word: 'smile',
+      translation: 'улыбка',
+      image: 'img/smile.jpg',
+      audioSrc: 'audio/smile.mp3'
+    },
+    {
       word: 'angry',
       translation: 'сердитый',
       image: 'img/angry.jpg',
@@ -388,12 +394,6 @@ const cards = [
       audioSrc: 'audio/scared.mp3'
     },
     {
-      word: 'smile',
-      translation: 'улыбка',
-      image: 'img/smile.jpg',
-      audioSrc: 'audio/smile.mp3'
-    },
-    {
       word: 'laugh',
       translation: 'смех',
       image: 'img/laugh.jpg',
@@ -401,9 +401,5 @@ const cards = [
     }
   ],
 ]
-
-
-
-
 
 export default cards;

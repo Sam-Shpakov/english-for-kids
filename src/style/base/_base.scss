@@ -127,6 +127,7 @@ body {
 .rotate:hover {
   -webkit-filter: none;
   filter: none;
+  cursor: pointer;
 }
 
 .card-container {
@@ -167,7 +168,8 @@ body {
 }
 
 .card:hover {
-  box-shadow: -1px 5px 15px 0 rgba(0, 0, 0, .5)
+  box-shadow: -1px 5px 15px 0 rgba(0, 0, 0, .5);
+  cursor: pointer;
 }
 
 .translate {
@@ -214,6 +216,10 @@ body {
   border-width: 1px;
   -webkit-transition: .3s;
   transition: .3s
+}
+
+.btn:hover {
+  cursor: pointer;
 }
 
 .repeat {
@@ -322,13 +328,13 @@ nav {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-  user-select: none
+  user-select: none;
 }
 
 .menuToggle,
 .menuToggle input {
   display: block;
-  position: absolute
+  position: absolute;
 }
 
 .menuToggle input {
@@ -389,22 +395,22 @@ nav {
 }
 
 .menu {
+  position: fixed;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  position: absolute;
   width: 380px;
   height: calc(100vh + 20px);
   margin: -100px 0 0;
   padding: 125px 50px 50px;
-  left: calc(675px - 50vw);
+  left: 0px;
   background: linear-gradient(40deg, #ffd86f, #fc6262);
   list-style-type: none;
   -webkit-font-smoothing: antialiased;
   -webkit-transform-origin: 0 0;
   transform-origin: 0 0;
-  -webkit-transform: translate(-100%);
-  transform: translate(-100%);
+  -webkit-transform: translate(-200%);
+  transform: translate(-200%);
   -webkit-transition: -webkit-transform .5s cubic-bezier(.77, .2, .05, 1);
   transition: -webkit-transform .5s cubic-bezier(.77, .2, .05, 1);
   transition: transform .5s cubic-bezier(.77, .2, .05, 1);
@@ -430,20 +436,20 @@ nav {
 
 @media (max-width:1430px) {
   .menu {
-    left: calc(500px - 50vw)
+    left: 0px;
   }
 }
 
 @media (max-width:1080px) {
   .menu {
-    left: calc(325px - 50vw)
+    left: 0px;
   }
 }
 
 @media (max-width:730px) {
   .menu {
     width: 320px;
-    left: calc(150px - 50vw)
+    left: 0px;
   }
 
   .header-item {
@@ -488,7 +494,8 @@ nav {
 }
 
 .main-card:hover {
-  box-shadow: 0 10px 20px rgba(0, 0, 0, .4)
+  box-shadow: 0 10px 20px rgba(0, 0, 0, .4);
+  cursor: pointer;
 }
 
 .main-container {
@@ -611,8 +618,9 @@ nav {
 }
 
 table {
-  width: 90%;
+  width: 80%;
   border-collapse: collapse;
+
 }
 
 table thead tr {
@@ -621,12 +629,37 @@ table thead tr {
   background: linear-gradient(40deg, #00bf82, #0099ae)
 }
 
-table thead tr td {
+table thead tr th {
   border: 1px solid #01ab73;
+  font-size: 2.5vh;
+  margin: 2vh 2vh;
+  text-align: center;
 }
 
 table tbody tr td {
   border: 1px solid #e8e9eb;
+  font-size: 1.7vh;
+  text-align: center;
+}
+
+@media (max-width: 512px) {
+
+  table thead tr th {
+    font-size: 1.5vh;
+  }
+
+  table tbody tr td {
+    font-size: 1.4vh;
+  }
+
+  a.button {
+    font-size: 1.4vh;
+    padding: 0.1vh 0.2vh;
+  }
+
+  .buttons {
+    margin: 1vh;
+  }
 }
 
 table tbody tr:nth-child(2n) {
@@ -635,4 +668,38 @@ table tbody tr:nth-child(2n) {
 
 table tbody tr:hover {
   background: #ebffe8;
+}
+
+a.button {
+  display: inline-block;
+  font-family: arial, sans-serif;
+  font-size: 2.5vh;
+  font-weight: bold;
+  color: rgb(68, 68, 68);
+  text-decoration: none;
+  user-select: none;
+  padding: 0.5vh 0.9vh;
+  outline: none;
+  border: 1px solid rgba(0, 0, 0, .1);
+  border-radius: 2px;
+  background: rgb(245, 245, 245) linear-gradient(#f4f4f4, #f1f1f1);
+  transition: all .218s ease 0s;
+}
+
+a.button:hover {
+  color: rgb(24, 24, 24);
+  border: 1px solid rgb(198, 198, 198);
+  background: #f7f7f7 linear-gradient(#f7f7f7, #f1f1f1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
+}
+
+a.button:active {
+  color: rgb(51, 51, 51);
+  border: 1px solid rgb(204, 204, 204);
+  background: rgb(238, 238, 238) linear-gradient(rgb(238, 238, 238), rgb(224, 224, 224));
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .1) inset;
+}
+
+.buttons {
+  margin: 2vh;
 }

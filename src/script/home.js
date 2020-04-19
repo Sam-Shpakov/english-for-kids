@@ -17,7 +17,6 @@ window.onload = () => {
 class Page {
   constructor() {
     this.isMode = true;
-    this.isStartGame = false;
     this.numberCategory = 0;
     this.trueWord = '';
     this.arrayWordsForGame = [];
@@ -47,13 +46,12 @@ class Page {
     const main = new Main(this.container);
     main.createMain(this.isMode);
     body.prepend(this.root);
-    this.arrayAllWords = JSON.parse(localStorage.getItem('arrayAllWords'));
-    console.log(this.arrayAllWords);
   }
 
   addListenersOnKeys() {
     document.addEventListener('click', (event) => this.handlerClick(event));
     document.addEventListener('mouseout', (event) => this.handlerMouseout(event));
+
   }
 
 
@@ -299,7 +297,8 @@ class Page {
         this.container.classList.add('container');
         this.appcontainer.append(this.container);
         const statistics = new Statistics(this.container);
-        statistics.createStatistics(this.numberCategory);
+        statistics.createStatistics();
+
         break;
       }
     }
@@ -324,34 +323,36 @@ class Page {
 
   clickOnCard(event) {
     let wordClick = event.target.childNodes[0].innerHTML;
-    
     if (this.isTrain()) {
-      this.addWordInLocalStorageModeTrain(wordClick);
       this.clickOnCardModeTrain(wordClick);
     } else {
-      this.addWordInLocalStorageModePlay(wordClick);
       this.clickOnCardModePlay(wordClick);
     }
-    localStorage.setItem('arrayAllWords', JSON.stringify(this.arrayAllWords));
   }
 
-  addWordInLocalStorageModeTrain(addWord) {
-    this.arrayAllWords.forEach((key) => {
-      if (key.word == addWord) {
-        key.countTrain++;
-      }
-    });
-  }
-
-  addWordInLocalStorageModePlay(addWord) {
-    this.arrayAllWords.forEach((key) => {
-      if (key.word == addWord) {
-        key.countTrain++;
+  createLocalStorage() {
+    this.allWords = [];
+    CARDS.forEach((keyCategory, numCategory) => {
+      if (numCategory != 0) {
+        CARDS[numCategory].forEach((key) => {
+          let bufWord = key.word;
+          let translation = key.translation;
+          this.allWords.push({
+            word: bufWord,
+            translation: translation,
+            countTrain: 0,
+            guessPlay: 0,
+            ErrorsPlay: 0,
+            rate: 0,
+          });
+          localStorage.setItem('allWords', JSON.stringify(this.allWords));
+        });
       }
     });
   }
 
   clickOnCardModeTrain(wordClick) {
+    this.addWordInLocalStorageModeTrain(wordClick);
     let src = 'assets/';
     src += this.searchCardByWord(wordClick);
     let audio = document.querySelector('.audio');
@@ -360,22 +361,93 @@ class Page {
   }
 
   clickOnCardModePlay(wordClick) {
-    if (this.isStartGame) {
+    if (this.isStartGame()) {
       if (this.isTrueWord(wordClick)) {
+        this.addWordInLocalStorageModePlayGuess(wordClick);
         this.changeAfterSelectTrueWord();
         if (this.isFinishedWord()) {
           this.showResult();
         }
       } else {
         this.isWin = false;
-        this.changeAfterSelectFailWord(event);
+        this.changeAfterSelectFailWord(event, wordClick);
       }
     }
   }
 
+  isStartGame(){
+    if(document.querySelector('.btn').classList.contains('repeat')){
+      return true;
+    }
+  }
+  
+
+  addWordInLocalStorageModeTrain(addWord) {
+    this.allWords = JSON.parse(localStorage.getItem('allWords'));
+    if (this.allWords == null) {
+      this.createLocalStorage();
+      this.allWords.forEach((key) => {
+        if (key.word == addWord) {
+          key.countTrain++;
+        }
+      });
+    } else {
+      this.allWords.forEach((key) => {
+        if (key.word == addWord) {
+          key.countTrain++;
+        }
+      });
+    }
+    localStorage.setItem('allWords', JSON.stringify(this.allWords));
+  }
+
+  addWordInLocalStorageModePlayGuess(addWord) {
+    this.allWords = JSON.parse(localStorage.getItem('allWords'));
+    if (this.allWords == null) {
+      this.createLocalStorage();
+      this.allWords.forEach((key) => {
+        if (key.word == addWord) {
+          key.guessPlay++;
+          key.rate = Math.floor(key.ErrorsPlay / (key.guessPlay + key.ErrorsPlay) * 100);
+        }
+      });
+    } else {
+      console.log(this.allWords);
+      this.allWords.forEach((key) => {
+        if (key.word == addWord) {
+          key.guessPlay++;
+          key.rate = Math.floor(key.ErrorsPlay / (key.guessPlay + key.ErrorsPlay) * 100);
+        }
+      });
+    }
+    localStorage.setItem('allWords', JSON.stringify(this.allWords));
+  }
+
+  addWordInLocalStorageModePlayError(addWord) {
+    this.allWords = JSON.parse(localStorage.getItem('allWords'));
+    if (this.allWords == null) {
+      this.createLocalStorage();
+      this.allWords.forEach((key) => {
+        if (key.word == addWord) {
+          key.ErrorsPlay++;
+          key.rate = Math.floor(key.ErrorsPlay / (key.guessPlay + key.ErrorsPlay) * 100);
+        }
+      });
+    } else {
+      console.log(this.allWords);
+      this.allWords.forEach((key) => {
+        if (key.word == addWord) {
+          key.ErrorsPlay++;
+          key.rate = Math.floor(key.ErrorsPlay / (key.guessPlay + key.ErrorsPlay) * 100);
+        }
+      });
+    }
+    localStorage.setItem('allWords', JSON.stringify(this.allWords));
+  }
+
   searchCardByWord(word) {
     let src = '';
-    CARDS[this.numberCategory].forEach((key, index) => {
+    CARDS[this.numberCategory].forEach((key) => {
       if (key.word == word) {
         src = key.audioSrc;
       }
@@ -423,8 +495,9 @@ class Page {
 
   }
 
-  changeAfterSelectFailWord(event) {
+  changeAfterSelectFailWord(event, wordClick) {
     if (this.checkInactiveCard(event)) {
+      this.addWordInLocalStorageModePlayError(wordClick);
       let src = 'assets/audio/error.mp3';
       this.numberErrors++;
       console.log(this.numberErrors);
@@ -477,7 +550,6 @@ class Page {
   }
 
   returnToMain() {
-    console.log('SOS');
     this.numberErrors = 0;
     document.querySelector('.rating').remove();
     document.querySelector('body').classList.remove('succes');
@@ -485,7 +557,6 @@ class Page {
     document.querySelector('.btns').removeAttribute('style');
     document.querySelector('.switch-container').removeAttribute('style');
     this.numberCategory = 0;
-    console.log('numberCategory ' + this.numberCategory);
     this.container.remove();
     this.createContainer('Main');
   }
@@ -512,7 +583,7 @@ class Page {
 
   randomWordsFromCategory() {
     this.arrayWordsForGame = [];
-    CARDS[this.numberCategory].forEach((key, index) => {
+    CARDS[this.numberCategory].forEach((key) => {
       this.arrayWordsForGame.push(key.word);
     });
     this.arrayWordsForGame.sort(() => Math.random() - 0.5);
@@ -529,7 +600,7 @@ class Page {
       let audio = document.querySelector('.audio');
       audio.setAttribute('src', src);
       audio.play();
-      this.isStartGame = true;
+      this.isWin = true;
     } else {
       let src = 'assets/';
       console.log(this.trueWord);
