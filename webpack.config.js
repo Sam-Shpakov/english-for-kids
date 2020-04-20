@@ -3,7 +3,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin= require('copy-webpack-plugin');
-const webpack = require('webpack');
 
 
 module.exports = (env, options) => {
@@ -14,7 +13,7 @@ module.exports = (env, options) => {
     devtool: isProduction ? 'none' : 'source-map',
     watch: !isProduction,
     entry: {
-      home: './src/script/home.js',
+      home: './src/script/index.js',
       cards: './src/script/cards.js',
     },
     output: {
