@@ -1,11 +1,11 @@
 import CARDS from './cards.js';
 
 export default class Header {
-  constructor(header) {
-    this.header = header;
-  }
 
-  createHeader() {
+  getHeader() {
+    this.header = document.createElement('div');
+    this.header.classList.add('header-container');
+
     this.navigation = document.createElement('nav');
     this.navigation.classList.add('navigation');
     this.menuToggle = document.createElement('div');
@@ -42,9 +42,28 @@ export default class Header {
     this.switchLabel.insertAdjacentHTML('beforeend', keyInput);
     keyInput = '<span class="switch-handle"></span>';
     this.switchLabel.insertAdjacentHTML('beforeend', keyInput);
-  
+
     this.header.append(this.navigation);
     this.header.append(this.switch);
+    document.addEventListener('click', (event) => this.handlerClick(event));
+    
+    return this.header;
+  }
+
+  handlerClick(event) {
+    if (this.isBlurMenu(event)) {
+      this.blurMenu();
+    }
+  }
+
+  isBlurMenu(event) {
+    if (!event.target.classList.contains('menu') && event.target.tagName !== 'INPUT') {
+      return true;
+    }
+  }
+
+  blurMenu() {
+    document.querySelector('.menuToggle>input').checked = false;
   }
 
 }

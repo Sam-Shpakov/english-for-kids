@@ -1,21 +1,22 @@
 import '../style/style.scss';
 import CARDS from './cards.js';
 import Header from './header.js';
+import Categories from './categories.js';
 import Main from './Main.js';
 import Train from './train.js';
 import Play from './play.js';
-import Difficult from './Difficult.js';
-import Statistics from './Statistics.js';
-import '../script/cards.js';
+import Difficult from './difficult.js';
+import Statistics from './statistics.js';
+import './cards.js';
 
 
 window.onload = () => {
-  const page = new Page();
-  page.createPage();
-  page.addListenersOnKeys();
+  const app = new App();
+  app.initApp();
+  app.addListenersOnKeys();
 };
 
-class Page {
+class App {
   constructor() {
     this.isMode = true;
     this.numberCategory = 0;
@@ -25,7 +26,7 @@ class Page {
     this.numberErrors = 0;
   }
 
-  createPage() {
+  initApp() {
     const body = document.querySelector('body');
     this.root = document.createElement('div');
     this.root.setAttribute('id', 'root');
@@ -33,37 +34,67 @@ class Page {
     this.appcontainer = document.createElement('div');
     this.appcontainer.classList.add('app-container');
 
-    this.header = document.createElement('div');
-    this.header.classList.add('header-container');
-
-    this.container = document.createElement('div');
-    this.container.classList.add('container');
-
-    this.appcontainer.append(this.header);
-    this.appcontainer.append(this.container);
+    const header = new Header();
+    this.appcontainer.prepend(header.getHeader());
+    // let state = { displayTrophy: true };
+    // window.history.replaceState(state, null, "/categories");
+    // this.navigate(state); //и переход на по нужным URL
+    let url = window.location.pathname;
+    this.navigate(url); //и переход на по нужным URL
+    console.log('url ' + url);
     this.root.append(this.appcontainer);
-    const header = new Header(this.header);
-    header.createHeader();
-    const main = new Main(this.container);
-    main.createMain(this.isMode);
     body.prepend(this.root);
-    this.allWords = JSON.parse(localStorage.getItem('allWords'));
-    if (this.allWords == null) {
-      this.createLocalStorage();
-    }
+    this.getStatistics();
   }
 
   addListenersOnKeys() {
     document.addEventListener('click', (event) => this.handlerClick(event));
     document.addEventListener('mouseout', (event) => this.handlerMouseout(event));
   }
+  changeHash(id) {
+
+    try {
+       history.pushState(null,null,'/' + id);
+    }
+    catch(e) {
+       location.hash = '#id_'+id;
+    }
+    }
+
+  navigate(path) {
+    path = path.substring(2);
+    console.log('path' + path);
+    this.moveToCategories();
+    switch (path) {
+      case "cards": {
+        console.log('sss');
+        this.moveToCategories();
+        break;
+      }
+
+      case "categories/": {
+
+        break;
+      }
+
+      case "statistics": {
+
+        break;
+      }
+
+    }
+
+  }
+
+  moveToCategories(){
+    // addtourl();
+    const categories = new Categories(this.isMode);
+    this.appcontainer.append(categories.render());
+  }
 
 
 
   handlerClick(event) {
-    if (this.isBlurMenu(event)) {
-      this.blurMenu();
-    }
 
     if (this.isSwitchMode(event)) {
       this.switchMode();
@@ -675,6 +706,13 @@ class Page {
   clickOnTheadTable(event) {
     const statistics = new Statistics(this.container);
     statistics.getSortTable(event.target);
+  }
+
+  getStatistics(){
+    this.allWords = JSON.parse(localStorage.getItem('allWords'));
+    if (this.allWords == null) {
+      this.createLocalStorage();
+    }
   }
 
 
