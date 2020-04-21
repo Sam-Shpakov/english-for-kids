@@ -6,7 +6,7 @@ import Main from './Main.js';
 import Train from './train.js';
 import Play from './play.js';
 import Difficult from './difficult.js';
-import Statistics from './statistics.js';
+import Statistics from './statistic.js';
 import './cards.js';
 
 
@@ -36,12 +36,9 @@ class App {
 
     const header = new Header();
     this.appcontainer.prepend(header.getHeader());
-    // let state = { displayTrophy: true };
-    // window.history.replaceState(state, null, "/categories");
-    // this.navigate(state); //и переход на по нужным URL
-    let url = window.location.pathname;
-    this.navigate(url); //и переход на по нужным URL
-    console.log('url ' + url);
+
+    let url = window.location.hash;
+    this.navigate(url);
     this.root.append(this.appcontainer);
     body.prepend(this.root);
     this.getStatistics();
@@ -51,29 +48,18 @@ class App {
     document.addEventListener('click', (event) => this.handlerClick(event));
     document.addEventListener('mouseout', (event) => this.handlerMouseout(event));
   }
-  changeHash(id) {
-
-    try {
-       history.pushState(null,null,'/' + id);
-    }
-    catch(e) {
-       location.hash = '#id_'+id;
-    }
-    }
 
   navigate(path) {
-    path = path.substring(2);
-    console.log('path' + path);
-    this.moveToCategories();
+    path = path.slice(1);
+    console.log('path ' + path);
     switch (path) {
-      case "cards": {
-        console.log('sss');
+      case "categories": {
         this.moveToCategories();
         break;
       }
 
-      case "categories/": {
-
+      case "": {
+        this.moveToCategories();
         break;
       }
 
@@ -86,9 +72,15 @@ class App {
 
   }
 
-  moveToCategories(){
-    // addtourl();
-    const categories = new Categories(this.isMode);
+  moveToCategories() {
+    history.pushState(null, null, '/#categories');
+    const categories = new Categories(this.isMode, this.navigate);
+    this.appcontainer.append(categories.render());
+  }
+
+  moveToCategory() {
+    history.pushState(null, null, '/#category');
+    const categories = new Categories(this.isMode, this.navigate);
     this.appcontainer.append(categories.render());
   }
 
@@ -708,7 +700,7 @@ class App {
     statistics.getSortTable(event.target);
   }
 
-  getStatistics(){
+  getStatistics() {
     this.allWords = JSON.parse(localStorage.getItem('allWords'));
     if (this.allWords == null) {
       this.createLocalStorage();

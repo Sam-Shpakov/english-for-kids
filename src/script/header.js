@@ -27,7 +27,7 @@ export default class Header {
     let keyInput = '<a class="header-item active" href="#/">Main Page</a>';
     this.menuUl.insertAdjacentHTML('beforeend', keyInput);
     CARDS[0].forEach((key) => {
-      let keyValue = `<a class="header-item" href="#/">${key}</a>`;
+      let keyValue = `<a class="header-item" href="#categories">${key}</a>`;
       this.menuUl.insertAdjacentHTML('beforeend', keyValue);
     });
 
