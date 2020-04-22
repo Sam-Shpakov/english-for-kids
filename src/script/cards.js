@@ -1,7 +1,42 @@
-const cards = [ 
-  ['Action (set A)', 'Action (set B)', 'Action (set C)', 'Adjective', 'Animal (set A)', 'Animal (set B)', 'Clothes', 'Emotion', 'Statistics'],
-  [
+const cards = [
+  [{
+      name: 'Action (set A)',
+      id: 'action-set-a'
+    },
     {
+      name: 'Action (set B)',
+      id: 'action-set-b'
+    },
+    {
+      name: 'Action (set C)',
+      id: 'action-set-c'
+    },
+    {
+      name: 'Adjective',
+      id: 'adjective'
+    },
+    {
+      name: 'Animal (set A)',
+      id: 'animal-set-a'
+    },
+    {
+      name: 'Animal (set B)',
+      id: 'animal-set-b'
+    },
+    {
+      name: 'Clothes',
+      id: 'clothes'
+    },
+    {
+      name: 'Emotion',
+      id: 'emotion'
+    },
+    {
+      name: 'Statistics',
+      id: 'statistics'
+    }
+  ],
+  [{
       word: 'cry',
       translation: 'плакать',
       image: 'img/cry.jpg',
@@ -50,8 +85,7 @@ const cards = [
       audioSrc: 'audio/jump.mp3'
     }
   ],
-  [
-    {
+  [{
       word: 'open',
       translation: 'открывать',
       image: 'img/open.jpg',
@@ -100,8 +134,7 @@ const cards = [
       audioSrc: 'audio/skip.mp3'
     }
   ],
-  [
-    {
+  [{
       word: 'argue',
       translation: 'спорить',
       image: 'img/argue.jpg',
@@ -150,8 +183,7 @@ const cards = [
       audioSrc: 'audio/push.mp3'
     }
   ],
-  [
-    {
+  [{
       word: 'big',
       translation: 'большой',
       image: 'img/big.jpg',
@@ -200,8 +232,7 @@ const cards = [
       audioSrc: 'audio/old.mp3'
     }
   ],
-  [
-    {
+  [{
       word: 'chick',
       translation: 'цыплёнок',
       image: 'img/chick.jpg',
@@ -250,8 +281,7 @@ const cards = [
       audioSrc: 'audio/sheep.mp3'
     }
   ],
-  [
-    {
+  [{
       word: 'frog',
       translation: 'жаба',
       image: 'img/frog.jpg',
@@ -300,8 +330,7 @@ const cards = [
       audioSrc: 'audio/dolphin.mp3'
     }
   ],
-  [
-    {
+  [{
       word: 'skirt',
       translation: 'юбка',
       image: 'img/skirt.jpg',
@@ -350,8 +379,7 @@ const cards = [
       audioSrc: 'audio/shoe.mp3'
     }
   ],
-  [
-    {
+  [{
       word: 'sad',
       translation: 'грустный',
       image: 'img/sad.jpg',

@@ -1,15 +1,16 @@
 import CARDS from './cards.js';
 
 export default class Statistics {
-  constructor(statistics) {
-    this.statistics = statistics;
-  }
+  constructor() {}
 
-  createStatistics() {
-    this.goToTrain();
-    this.hideSwitch();
+  render() {
+    this.statistics = document.createElement('div');
+    this.statistics.classList.add('container');
+    //this.goToTrain();
+    //  this.hideSwitch();
     this.getAllWords();
     this.getButtons();
+
     let table = document.createElement("table");
     table.classList.add('table_sort');
     let tableBody = document.createElement("tbody");
@@ -97,10 +98,26 @@ export default class Statistics {
       cell.append(cellText);
       row.append(cell);
       tableBody.append(row);
-
     }
     table.append(tableBody);
-    this.statistics.append(table);
+    this.statistics.append(table);  
+    this.statistics.addEventListener('click', (event) => this.handlerClick(event));
+
+    return this.statistics;
+  }
+
+  handlerClick(event) {
+    if (this.isClickOnButtonReset(event)) {
+      this.clickOnButtonReset();
+    }
+
+    if (this.isClickOnButtonRepeatDifWord(event)) {
+      this.clickOnButtonRepeatDifWord();
+    }
+
+    if (this.isClickOnTheadTable(event)) {
+      this.clickOnTheadTable(event);
+    }
   }
 
   getSortTable(target) {
@@ -121,44 +138,40 @@ export default class Statistics {
       cell.classList.toggle('sorted', cell === target);
   }
 
-
   getButtons() {
     let keyValue = '<div class="helper"><p>Для сортировки нажмите на заголовок столбца</p></div>';
-    document.querySelector('.container').insertAdjacentHTML('afterbegin', keyValue);
+    this.statistics.insertAdjacentHTML('afterbegin', keyValue);
     keyValue = '<span class="buf"></span>';
-    document.querySelector('.container').insertAdjacentHTML('afterbegin', keyValue);
+    this.statistics.insertAdjacentHTML('afterbegin', keyValue);
     keyValue = '<div class="buttons"><a href="#" id="resetButton" class="buttonStatistics">Reset</a> <a href="#" id="repeatButton" class="buttonStatistics">Repeat difficult words</a></div>';
-    document.querySelector('.container').insertAdjacentHTML('afterbegin', keyValue);
+    this.statistics.insertAdjacentHTML('afterbegin', keyValue);
   }
 
-  goToTrain() {
-    let menu = document.querySelectorAll('.menu');
-    document.querySelector('.switch-input').setAttribute('checked', '');
-    for (let i = 0; i < menu.length; i++) {
-      menu[i].classList.add('green');
-    }
 
-    this.header = document.querySelector('.header-container');
-    this.switch = document.querySelector('.switch-container');
-    this.switch.remove();
-    this.switch = document.createElement("div");
-    this.switch.classList.add("switch-container");
-    this.switchLabel = document.createElement("label");
-    this.switchLabel.classList.add("switch");
-    this.switch.append(this.switchLabel);
-    let keyInput = '<input type="checkbox" class="switch-input" checked="">';
-    this.switchLabel.insertAdjacentHTML('beforeend', keyInput);
-    keyInput = '<span class="switch-label" data-on="Train" data-off="Play"></span>';
-    this.switchLabel.insertAdjacentHTML('beforeend', keyInput);
-    keyInput = '<span class="switch-handle"></span>';
-    this.switchLabel.insertAdjacentHTML('beforeend', keyInput);
-    this.header.append(this.switch);
-    document.querySelector('.switch-container').style.display = 'none';
-  }
+  // goToTrain() {
+  //   let menu = document.querySelectorAll('.menu');
+  //   document.querySelector('.switch-input').setAttribute('checked', '');
+  //   for (let i = 0; i < menu.length; i++) {
+  //     menu[i].classList.add('green');
+  //   }
 
-  hideSwitch() {
-    document.querySelector('.switch-container').style.display = 'none';
-  }
+  //   this.header = document.querySelector('.header-container');
+  //   this.switch = document.querySelector('.switch-container');
+  //   this.switch.remove();
+  //   this.switch = document.createElement("div");
+  //   this.switch.classList.add("switch-container");
+  //   this.switchLabel = document.createElement("label");
+  //   this.switchLabel.classList.add("switch");
+  //   this.switch.append(this.switchLabel);
+  //   let keyInput = '<input type="checkbox" class="switch-input" checked="">';
+  //   this.switchLabel.insertAdjacentHTML('beforeend', keyInput);
+  //   keyInput = '<span class="switch-label" data-on="Train" data-off="Play"></span>';
+  //   this.switchLabel.insertAdjacentHTML('beforeend', keyInput);
+  //   keyInput = '<span class="switch-handle"></span>';
+  //   this.switchLabel.insertAdjacentHTML('beforeend', keyInput);
+  //   this.header.append(this.switch);
+  //   document.querySelector('.switch-container').style.display = 'none';
+  // }
 
   getAllWords() {
     this.allWords = JSON.parse(localStorage.getItem('allWords'));
@@ -183,6 +196,45 @@ export default class Statistics {
         });
       }
     });
+  }
+
+  isClickOnButtonReset(event) {
+    if (event.target.id == ('resetButton')) {
+      return true;
+    }
+  }
+
+  clickOnButtonReset() {
+    this.container.remove();
+    this.container = document.createElement('div');
+    this.container.classList.add('container');
+    this.appcontainer.append(this.container);
+    const statistics = new Statistics(this.container);
+    statistics.resetAllWords();
+    statistics.createStatistics();
+  }
+
+  isClickOnButtonRepeatDifWord(event) {
+    if (event.target.id == ('repeatButton')) {
+      return true;
+    }
+  }
+
+  clickOnButtonRepeatDifWord() {
+    console.log('click');
+    window.location.hash = 'category/action-set-a';
+    this.navigation();
+    console.log('click' + window.location.hash);
+  }
+
+  isClickOnTheadTable(event) {
+    if (event.target.classList.contains('tableTh')) {
+      return true;
+    }
+  }
+
+  clickOnTheadTable(event) {
+    this.getSortTable(event.target);
   }
 
 }

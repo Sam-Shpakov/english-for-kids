@@ -24,12 +24,16 @@ export default class Header {
     this.menuUl.classList.add('menu');
     this.menuUl.classList.add('green');
     this.menuToggle.append(this.menuUl);
-    let keyInput = '<a class="header-item active" href="#/">Main Page</a>';
+    let keyInput = '<a class="header-item active" href="#">Main Page</a>';
     this.menuUl.insertAdjacentHTML('beforeend', keyInput);
     CARDS[0].forEach((key) => {
-      let keyValue = `<a class="header-item" href="#categories">${key}</a>`;
-      this.menuUl.insertAdjacentHTML('beforeend', keyValue);
+      if (key.id != 'statistics') {
+        let keyValue = `<a class="header-item" href="#category/${key.id}">${key.name}</a>`;
+        this.menuUl.insertAdjacentHTML('beforeend', keyValue);
+      }
     });
+    keyInput = `<a class="header-item" href="#statistics">Statistics</a>`;
+    this.menuUl.insertAdjacentHTML('beforeend', keyInput);
 
     this.switch = document.createElement("div");
     this.switch.classList.add("switch-container");
@@ -45,14 +49,19 @@ export default class Header {
 
     this.header.append(this.navigation);
     this.header.append(this.switch);
+
     document.addEventListener('click', (event) => this.handlerClick(event));
-    
+
     return this.header;
   }
 
   handlerClick(event) {
     if (this.isBlurMenu(event)) {
       this.blurMenu();
+    }
+
+    if (this.isClickOnMenu(event)) {
+      this.clickOnMenu(event);
     }
   }
 
@@ -66,4 +75,21 @@ export default class Header {
     document.querySelector('.menuToggle>input').checked = false;
   }
 
+  isClickOnMenu(event) {
+    if (event.target.parentNode.classList.contains('header-item') || event.target.classList.contains('header-item')) {
+      return true;
+    }
+  }
+
+  clickOnMenu(event) {
+    this.controlActiveItem(event);
+  }
+
+  controlActiveItem(event) {
+    let menuItems = document.querySelectorAll('.header-item');
+    for (let i = 0; i < menuItems.length; i++) {
+      menuItems[i].classList.remove('active');
+    }
+    event.target.classList.add('active');
+  }
 }
