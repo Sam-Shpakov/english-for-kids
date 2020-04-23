@@ -76,8 +76,10 @@ export default class Header {
   }
 
   isClickOnMenu(event) {
-    if (event.target.parentNode.classList.contains('header-item') || event.target.classList.contains('header-item')) {
-      return true;
+    if (event.target.classList.length != 0) {
+      if (event.target.parentNode.classList.contains('header-item') || event.target.classList.contains('header-item')) {
+        return true;
+      }
     }
   }
 
