@@ -1,13 +1,13 @@
 import CARDS from './cards.js';
 
 export default class Category {
-  constructor(isMode, navigate) {
+  constructor(isMode) {
     this.isMode = isMode;
-    this.navigate = navigate;
-    this.numberErrors = 0; 
+    this.numberErrors = 0;
   }
 
   render(indexCategory) {
+    document.querySelector('.switch-container').style.display = 'block';
     this.category = document.createElement('div');
     this.category.classList.add('container');
     let keyValue = '<div class="rating none"></div>';
@@ -63,7 +63,6 @@ export default class Category {
       this.clickOnButtonStartGame(event);
     }
 
-
   }
 
   isClickOnCard(event) {
@@ -74,6 +73,7 @@ export default class Category {
 
   clickOnCard(event) {
     let wordClick = event.target.childNodes[0].innerHTML;
+    console.log("click " + this.isMode);
     if (this.isMode) {
       this.clickOnCardModeTrain(wordClick);
     } else {
@@ -178,6 +178,51 @@ export default class Category {
     }
   }
 
+  switchModeInCategory() {
+    if (this.isMode) {
+      document.querySelector('.switch-input').setAttribute('checked', '');
+      let button = document.querySelector('.btn');
+      button.classList.remove('none');
+      let menu = document.querySelectorAll('.menu');
+      let cards = document.querySelectorAll('.card');
+      document.querySelector('.rating').remove();
+      let keyValue = '<div class="rating"></div>';
+      document.querySelector('.container').insertAdjacentHTML('afterbegin', keyValue);
+      for (let i = 0; i < menu.length; i++) {
+        menu[i].classList.remove('green');
+      }
+      for (let i = 0; i < cards.length; i++) {
+        cards[i].classList.add('card-cover');
+        cards[i].querySelector('.card-header').classList.add('none');
+        cards[i].querySelector('.rotate').classList.add('none');
+      }
+
+    } else {
+      document.querySelector('.switch-input').removeAttribute('checked');
+      let button = document.querySelector('.btn');
+      button.classList.add('none');
+      button.classList.remove('repeat');
+      let front = document.querySelectorAll('.front');
+      for (let i = 0; i < front.length; i++) {
+        front[i].classList.remove('inactive');
+      }
+      document.querySelector('.rating').remove();
+      let keyValue = '<div class="rating none"></div>';
+      document.querySelector('.container').insertAdjacentHTML('afterbegin', keyValue);
+      let menu = document.querySelectorAll('.menu');
+      let cards = document.querySelectorAll('.card');
+      for (let i = 0; i < menu.length; i++) {
+        menu[i].classList.add('green');
+      }
+      for (let i = 0; i < cards.length; i++) {
+        cards[i].classList.remove('card-cover');
+        cards[i].querySelector('.card-header').classList.remove('none');
+        cards[i].querySelector('.rotate').classList.remove('none');
+      }
+    }
+    this.isMode = !this.isMode;
+  }
+
   changeAfterSelectTrueWord() {
     let src = 'assets/audio/correct.mp3';
     let audio = document.querySelector('.audio');
@@ -260,16 +305,18 @@ export default class Category {
   }
 
   returnToMain() {
-    this.numberErrors = 0;
-    document.querySelector('.rating').remove();
-    document.querySelector('body').classList.remove('succes');
-    document.querySelector('body').classList.remove('failure');
-    document.querySelector('.btns').removeAttribute('style');
-    document.querySelector('.switch-container').removeAttribute('style');
-    this.numberCategory = 0;
-    this.container.remove();
-    window.location.hash = '#';
+    // this.numberErrors = 0;
+    // document.querySelector('.rating').remove();
+    // document.querySelector('body').classList.remove('succes');
+    // document.querySelector('body').classList.remove('failure');
+    // document.querySelector('.btns').removeAttribute('style');
+    // document.querySelector('.switch-container').removeAttribute('style');
+    // this.container.remove();
+    window.location.hash = '#statistics';
   }
+
+
+
 
   isClickOnRotate(event) {
     if (event.target.classList.contains('rotate')) {
@@ -280,6 +327,8 @@ export default class Category {
   clickOnRotate(event) {
     event.target.parentNode.classList.add('translate');
   }
+
+
 
   isClickOnButtonStartGame(event) {
     if (event.target.classList.contains('btn')) {
@@ -292,7 +341,7 @@ export default class Category {
     if (!event.target.classList.contains('repeat')) {
       this.numberErrors = 0;
       event.target.classList.add('repeat');
-      if (this.numberCategory != 9) {
+      if (!document.querySelector('.container').classList.contains('difficult')) {
         this.randomWordsFrom(CARDS[this.indexCategory]);
       } else {
         this.randomWordsFrom(this.difficultWords);
@@ -342,6 +391,9 @@ export default class Category {
   }
 
 
+
+
+
   handlerMouseout(event) {
     if (this.isMouseoutCard(event)) {
       this.mouseoutCard();
@@ -357,6 +409,88 @@ export default class Category {
   mouseoutCard() {
     event.target.classList.remove('translate');
     event.target.parentNode.classList.remove('translate');
+  }
+
+  createDifficult() {
+    document.querySelector('.switch-container').style.display = 'block';
+    this.difficult = document.createElement('div');
+    this.difficult.classList.add('container');
+    this.difficult.classList.add('difficult');
+
+    let keyValue = '<div class="rating none"></div>';
+    this.difficult.insertAdjacentHTML('beforeend', keyValue);
+    this.getDifficultWords();
+    if (this.isMode) {
+      this.difficultWords.forEach((key) => {
+        this.searchInfoDifficultWord(key.translation);
+        let word = key.word;
+        let translation = this.result[0];
+        let link = './assets/' + this.result[1];
+        keyValue = `<div class="card-container"><div class="card"><div class="front" style="background-image: url(${link});"><div class="card-header">${word}</div></div><div class="back" style="background-image: url(${link}"><div class="card-header">${translation}</div></div><div class="rotate"></div></div></div>`;
+        this.difficult.insertAdjacentHTML('beforeend', keyValue);
+      });
+      keyValue = '<div class="btns"><button class="btn none">Start game</button></div>';
+      this.difficult.insertAdjacentHTML('beforeend', keyValue);
+      keyValue = '<audio class="audio"></audio>';
+      this.difficult.insertAdjacentHTML('beforeend', keyValue);
+      keyValue = '<audio class="soundEffects"></audio>';
+      this.difficult.insertAdjacentHTML('beforeend', keyValue);
+    } else {
+      this.difficultWords.forEach((key) => {
+        this.searchInfoDifficultWord(key.translation);
+        let word = key.word;
+        let translation = this.result[0];
+        let link = './assets/' + this.result[1];
+        keyValue = `<div class="card-container"><div class="card card-cover"><div class="front" style="background-image: url(${link});"><div class="card-header none">${word}</div></div><div class="back" style="background-image: url(${link}"><div class="card-header none">${translation}</div></div><div class="rotate none"></div></div></div>`;
+        this.difficult.insertAdjacentHTML('beforeend', keyValue);
+      });
+      keyValue = '<div class="btns"><button class="btn">Start game</button></div>';
+      this.difficult.insertAdjacentHTML('beforeend', keyValue);
+      keyValue = '<audio class="audio"></audio>';
+      this.difficult.insertAdjacentHTML('beforeend', keyValue);
+      keyValue = '<audio class="soundEffects"></audio>';
+      this.difficult.insertAdjacentHTML('beforeend', keyValue);
+    }
+
+    this.difficult.addEventListener('click', (event) => this.handlerClick(event));
+    this.difficult.addEventListener('mouseout', (event) => this.handlerMouseout(event));
+    return this.difficult;
+  }
+
+  getDifficultWords() {
+    let bufAllWords = JSON.parse(localStorage.getItem('allWords'));
+    bufAllWords.sort(function (a, b) {
+      if (a.rate < b.rate) {
+        return 1;
+      }
+      if (a.rate > b.rate) {
+        return -1;
+      }
+      return 0;
+    });
+    this.difficultWords = bufAllWords.slice(0, 8);
+    let flag = 0;
+    this.difficultWords.forEach((key, index) => {
+      if (key.rate == 0 && flag == 0) {
+        this.difficultWords = this.difficultWords.slice(0, index);
+        flag = 1;
+      }
+    });
+  }
+
+  searchInfoDifficultWord(translation) {
+    this.result = [];
+    CARDS.forEach((keyCategory, numCategory) => {
+      if (numCategory != 0) {
+        CARDS[numCategory].forEach((key) => {
+          if (key.translation == translation) {
+            this.result[0] = key.translation;
+            this.result[1] = key.image;
+            this.result[2] = key.audioSrc;
+          }
+        });
+      }
+    });
   }
 
 }

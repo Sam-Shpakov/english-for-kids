@@ -1,12 +1,12 @@
 import CARDS from './cards.js';
 
 export default class Categories {
-  constructor(isMode, navigate) {
+  constructor(isMode) {
     this.isMode = isMode;
-    this.navigate = navigate;
   }
 
   render() {
+    document.querySelector('.switch-container').style.display = 'block';
     this.categories = document.createElement('div');
     this.categories.classList.add('container');
     this.categories.classList.add('main-container');
@@ -53,6 +53,29 @@ export default class Categories {
 
   сlickOnСategories() {
     //window.location.hash = '#category';
+  }
+
+  switchModeInMainPage() {
+    let menu = document.querySelectorAll('.menu');
+    let cards = document.querySelectorAll('.main-card');
+    if (this.isMode) {
+      document.querySelector('.switch-input').setAttribute('checked', '');
+      for (let i = 0; i < menu.length; i++) {
+        menu[i].classList.remove('green');
+      }
+      for (let i = 0; i < cards.length; i++) {
+        cards[i].classList.remove('green');
+      }
+
+    } else {
+      document.querySelector('.switch-input').removeAttribute('checked');
+      for (let i = 0; i < menu.length; i++) {
+        menu[i].classList.add('green');
+      }
+      for (let i = 0; i < cards.length; i++) {
+        cards[i].classList.add('green');
+      }
+    }
   }
 
 }

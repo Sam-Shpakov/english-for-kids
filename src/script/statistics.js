@@ -1,18 +1,22 @@
 import CARDS from './cards.js';
 
 export default class Statistics {
-  constructor() {}
+  constructor(isMode, navigate) {
+    this.isMode = isMode;
+    this.navigate = navigate;
+    this.numberErrors = 0; 
+  }
 
   render() {
+    document.querySelector('.switch-container').style.display = 'block';
     this.statistics = document.createElement('div');
     this.statistics.classList.add('container');
-    //this.goToTrain();
-    //  this.hideSwitch();
+    this.hideSwitch();
     this.getAllWords();
     this.getButtons();
-
-    let table = document.createElement("table");
-    table.classList.add('table_sort');
+    console.log(this.allWords);
+    this.table = document.createElement("table");
+    this.table.classList.add('table_sort');
     let tableBody = document.createElement("tbody");
     for (let i = 0; i < this.allWords.length; i++) {
       if (i == 0) {
@@ -65,7 +69,7 @@ export default class Statistics {
         headCell.append(headCellText);
         row.append(headCell);
         head.append(row);
-        table.append(head);
+        this.table.append(head);
       }
       let row = document.createElement('tr');
       let cell = document.createElement('td');
@@ -99,8 +103,9 @@ export default class Statistics {
       row.append(cell);
       tableBody.append(row);
     }
-    table.append(tableBody);
-    this.statistics.append(table);  
+    this.table.append(tableBody);
+    this.statistics.append(this.table);  
+
     this.statistics.addEventListener('click', (event) => this.handlerClick(event));
 
     return this.statistics;
@@ -118,6 +123,63 @@ export default class Statistics {
     if (this.isClickOnTheadTable(event)) {
       this.clickOnTheadTable(event);
     }
+  }
+
+  isClickOnButtonReset(event) {
+    if (event.target.id == ('resetButton')) {
+      return true;
+    }
+  }
+
+  clickOnButtonReset() {
+    event.preventDefault();
+    this.statistics.remove();
+    
+    this.resetAllWords();
+    document.querySelector('.app-container').append(this.render());
+  }
+
+  isClickOnButtonRepeatDifWord(event) {
+    if (event.target.id == ('repeatButton')) {
+      return true;
+    }
+  }
+
+  clickOnButtonRepeatDifWord() {
+    event.preventDefault();
+    window.location.hash = '#category/difficult';
+  }
+
+  isClickOnTheadTable(event) {
+    if (event.target.classList.contains('tableTh')) {
+      return true;
+    }
+  }
+
+  clickOnTheadTable(event) {
+    this.getSortTable(event.target);
+  }
+
+  
+  resetAllWords() {
+    this.allWords = [];
+    CARDS.forEach((keyCategory, numCategory) => {
+      if (numCategory != 0) {
+        CARDS[numCategory].forEach((key) => {
+          let bufWord = key.word;
+          let translation = key.translation;
+          this.allWords.push({
+            word: bufWord,
+            translation: translation,
+            countTrain: 0,
+            guessPlay: 0,
+            ErrorsPlay: 0,
+            rate: 0,
+          });
+          localStorage.setItem('allWords', JSON.stringify(this.allWords));
+        });
+      }
+    });
   }
 
   getSortTable(target) {
@@ -147,94 +209,11 @@ export default class Statistics {
     this.statistics.insertAdjacentHTML('afterbegin', keyValue);
   }
 
-
-  // goToTrain() {
-  //   let menu = document.querySelectorAll('.menu');
-  //   document.querySelector('.switch-input').setAttribute('checked', '');
-  //   for (let i = 0; i < menu.length; i++) {
-  //     menu[i].classList.add('green');
-  //   }
-
-  //   this.header = document.querySelector('.header-container');
-  //   this.switch = document.querySelector('.switch-container');
-  //   this.switch.remove();
-  //   this.switch = document.createElement("div");
-  //   this.switch.classList.add("switch-container");
-  //   this.switchLabel = document.createElement("label");
-  //   this.switchLabel.classList.add("switch");
-  //   this.switch.append(this.switchLabel);
-  //   let keyInput = '<input type="checkbox" class="switch-input" checked="">';
-  //   this.switchLabel.insertAdjacentHTML('beforeend', keyInput);
-  //   keyInput = '<span class="switch-label" data-on="Train" data-off="Play"></span>';
-  //   this.switchLabel.insertAdjacentHTML('beforeend', keyInput);
-  //   keyInput = '<span class="switch-handle"></span>';
-  //   this.switchLabel.insertAdjacentHTML('beforeend', keyInput);
-  //   this.header.append(this.switch);
-  //   document.querySelector('.switch-container').style.display = 'none';
-  // }
+  hideSwitch() {
+    document.querySelector('.switch-container').style.display = 'none';
+  }
 
   getAllWords() {
     this.allWords = JSON.parse(localStorage.getItem('allWords'));
   }
-
-  resetAllWords() {
-    this.allWords = [];
-    CARDS.forEach((keyCategory, numCategory) => {
-      if (numCategory != 0) {
-        CARDS[numCategory].forEach((key) => {
-          let bufWord = key.word;
-          let translation = key.translation;
-          this.allWords.push({
-            word: bufWord,
-            translation: translation,
-            countTrain: 0,
-            guessPlay: 0,
-            ErrorsPlay: 0,
-            rate: 0,
-          });
-          localStorage.setItem('allWords', JSON.stringify(this.allWords));
-        });
-      }
-    });
-  }
-
-  isClickOnButtonReset(event) {
-    if (event.target.id == ('resetButton')) {
-      return true;
-    }
-  }
-
-  clickOnButtonReset() {
-    this.container.remove();
-    this.container = document.createElement('div');
-    this.container.classList.add('container');
-    this.appcontainer.append(this.container);
-    const statistics = new Statistics(this.container);
-    statistics.resetAllWords();
-    statistics.createStatistics();
-  }
-
-  isClickOnButtonRepeatDifWord(event) {
-    if (event.target.id == ('repeatButton')) {
-      return true;
-    }
-  }
-
-  clickOnButtonRepeatDifWord() {
-    console.log('click');
-    window.location.hash = 'category/action-set-a';
-    this.navigation();
-    console.log('click' + window.location.hash);
-  }
-
-  isClickOnTheadTable(event) {
-    if (event.target.classList.contains('tableTh')) {
-      return true;
-    }
-  }
-
-  clickOnTheadTable(event) {
-    this.getSortTable(event.target);
-  }
-
 }
