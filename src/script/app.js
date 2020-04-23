@@ -44,22 +44,16 @@ class App {
     let path = window.location.hash.slice(1);
     path = this.parsePath(path);
     this.removeContainer();
-    console.log('newPath ' + path.length);
-
     switch (path[0]) {
       case "": {
         this.moveToCategories();
         break;
       }
-
       case "category": {
-        console.log('Категория работает');
         this.moveToCategory(path[1]);
         break;
       }
-
       case "statistics": {
-        console.log('Cтатистика работает');
         this.moveToStatistics();
         break;
       }
@@ -104,7 +98,6 @@ class App {
     let result;
     CARDS[0].forEach((key, index) => {
       if (key.id == id) {
-        console.log('index ' + index);
         result = index + 1;
       }
     });
@@ -127,7 +120,6 @@ class App {
 
   switchMode() {
     let indexCategory = this.searchIndexCategoryByPath();
-    console.log(indexCategory);
     switch (indexCategory) {
       case 0: {
         this.categories.switchModeInMainPage();
@@ -144,13 +136,11 @@ class App {
     let result = -1;
     let path = window.location.hash.slice(1);
     path = this.parsePath(path);
-    console.log('newPath ' + path.length);
     if (path.length == 1) {
       result = 0;
     } else {
       CARDS[0].forEach((key, index) => {
         if (key.id == path[1]) {
-          console.log('index ' + index);
           result = index + 1;
         }
       });

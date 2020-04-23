@@ -14,7 +14,6 @@ export default class Statistics {
     this.hideSwitch();
     this.getAllWords();
     this.getButtons();
-    console.log(this.allWords);
     this.table = document.createElement("table");
     this.table.classList.add('table_sort');
     let tableBody = document.createElement("tbody");

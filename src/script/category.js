@@ -73,7 +73,6 @@ export default class Category {
 
   clickOnCard(event) {
     let wordClick = event.target.childNodes[0].innerHTML;
-    console.log("click " + this.isMode);
     if (this.isMode) {
       this.clickOnCardModeTrain(wordClick);
     } else {
@@ -305,14 +304,13 @@ export default class Category {
   }
 
   returnToMain() {
-    // this.numberErrors = 0;
-    // document.querySelector('.rating').remove();
-    // document.querySelector('body').classList.remove('succes');
-    // document.querySelector('body').classList.remove('failure');
-    // document.querySelector('.btns').removeAttribute('style');
-    // document.querySelector('.switch-container').removeAttribute('style');
-    // this.container.remove();
-    window.location.hash = '#statistics';
+    document.querySelector('.rating').remove();
+    document.querySelector('body').classList.remove('succes');
+    document.querySelector('body').classList.remove('failure');
+    document.querySelector('.btns').removeAttribute('style');
+    document.querySelector('.switch-container').removeAttribute('style');
+    this.container.remove();
+    window.location.hash = '#';
   }
 
 
