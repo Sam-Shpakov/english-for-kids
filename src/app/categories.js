@@ -34,25 +34,7 @@ export default class Categories {
       });
     }
 
-    this.categories.addEventListener('click', (event) => this.handlerClick(event));
-
     return this.categories;
-  }
-
-  handlerClick(event) {
-    if (this.isClickOnСategories(event)) {
-      this.сlickOnСategories();
-    }
-  }
-
-  isClickOnСategories(event) {
-    if (event.target.parentNode.classList.contains('main-card') || event.target.classList.contains('main-card')) {
-      return true;
-    }
-  }
-
-  сlickOnСategories() {
-    //window.location.hash = '#category';
   }
 
   switchModeInMainPage() {
