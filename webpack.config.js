@@ -13,7 +13,7 @@ module.exports = (env, options) => {
     devtool: isProduction ? 'none' : 'source-map',
     watch: !isProduction,
     entry: {
-      app: './src/script/app.js',
+      app: './src/app/app.js',
     },
     output: {
       filename: '[name].js',
