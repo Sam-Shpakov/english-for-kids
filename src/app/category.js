@@ -275,6 +275,9 @@ export default class Category {
       let keyValue = '<div class="rating" style="justify-content: center;">Win!</div>';
       this.container = document.querySelector('.container');
       this.container.insertAdjacentHTML('beforebegin', keyValue);
+      let audio = document.querySelector('.audio');
+      audio.setAttribute('src', '../assets/audio/success.mp3');
+      audio.play();
       let cards = document.querySelectorAll('.card');
       for (let i = 0; i < cards.length; i++) {
         cards[i].style.display = 'none';
@@ -290,6 +293,9 @@ export default class Category {
       let keyValue = `<div class="rating" style="justify-content: center;">${this.numberErrors} Errors</div>`;
       this.container = document.querySelector('.container');
       this.container.insertAdjacentHTML('beforebegin', keyValue);
+      let audio = document.querySelector('.audio');
+      audio.setAttribute('src', '../assets/audio/failure.mp3');
+      audio.play();
       let cards = document.querySelectorAll('.card');
       for (let i = 0; i < cards.length; i++) {
         cards[i].style.display = 'none';
