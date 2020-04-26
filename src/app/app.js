@@ -225,27 +225,6 @@ class App {
     return JSON.parse(localStorage.getItem('allWords'));
   }
 
-  // createLocalStorage() {
-  //   this.allWords = [];
-  //   CARDS.forEach((keyCategory, numCategory) => {
-  //     if (numCategory != 0) {
-  //       CARDS[numCategory].forEach((key) => {
-  //         let bufWord = key.word;
-  //         let translation = key.translation;
-  //         this.allWords.push({
-  //           word: bufWord,
-  //           translation: translation,
-  //           countTrain: 0,
-  //           guessPlay: 0,
-  //           ErrorsPlay: 0,
-  //           rate: 0,
-  //         });
-  //       });
-  //     }
-  //   });
-  //   localStorage.setItem('allWords', JSON.stringify(this.allWords));
-    
-  // }
 
   createWords() {
     const words = CARDS
