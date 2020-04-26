@@ -6,7 +6,6 @@ export default class Categories {
   }
 
   render() {
-    document.querySelector('.switch-container').style.display = 'block';
     this.categories = document.createElement('div');
     this.categories.classList.add('container');
     this.categories.classList.add('main-container');
@@ -58,6 +57,6 @@ export default class Categories {
         cards[i].classList.add('green');
       }
     }
+    this.isMode = !this.isMode;
   }
-
 }

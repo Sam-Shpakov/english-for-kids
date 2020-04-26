@@ -6,17 +6,14 @@ export default class Category {
     this.numberErrors = 0;
   }
 
-  render(indexCategory) {
-    document.querySelector('.switch-container').style.display = 'block';
+  render(arrayCategory) {
     this.category = document.createElement('div');
     this.category.classList.add('container');
     let keyValue = '<div class="rating none"></div>';
     this.category.insertAdjacentHTML('beforeend', keyValue);
-
-    this.indexCategory = indexCategory;
-
+    this.arrayCategory = arrayCategory;
     if (this.isMode) {
-      CARDS[indexCategory].forEach((key) => {
+      arrayCategory.forEach((key) => {
         let link = './assets/' + key.image;
         let word = key.word;
         let translation = key.translation;
@@ -30,7 +27,7 @@ export default class Category {
       keyValue = '<audio class="soundEffects"></audio>';
       this.category.insertAdjacentHTML('beforeend', keyValue);
     } else {
-      CARDS[indexCategory].forEach((key) => {
+      arrayCategory.forEach((key) => {
         let link = './assets/' + key.image;
         let word = key.word;
         let translation = key.translation;
@@ -294,8 +291,14 @@ export default class Category {
       this.container = document.querySelector('.container');
       this.container.insertAdjacentHTML('beforebegin', keyValue);
       let audio = document.querySelector('.audio');
-      audio.setAttribute('src', '../assets/audio/failure.mp3');
-      audio.play();
+      let src = '../assets/audio/failure.mp3';
+      audio.setAttribute('src', src);
+      // audio.play();
+      let playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.then(_ => {})
+      .catch(error => { });
+    }
       let cards = document.querySelectorAll('.card');
       for (let i = 0; i < cards.length; i++) {
         cards[i].style.display = 'none';
@@ -346,7 +349,7 @@ export default class Category {
       this.numberErrors = 0;
       event.target.classList.add('repeat');
       if (!document.querySelector('.container').classList.contains('difficult')) {
-        this.randomWordsFrom(CARDS[this.indexCategory]);
+        this.randomWordsFrom(this.arrayCategory);
       } else {
         this.randomWordsFrom(this.difficultWords);
       }
@@ -414,87 +417,4 @@ export default class Category {
     event.target.classList.remove('translate');
     event.target.parentNode.classList.remove('translate');
   }
-
-  createDifficult() {
-    document.querySelector('.switch-container').style.display = 'block';
-    this.difficult = document.createElement('div');
-    this.difficult.classList.add('container');
-    this.difficult.classList.add('difficult');
-
-    let keyValue = '<div class="rating none"></div>';
-    this.difficult.insertAdjacentHTML('beforeend', keyValue);
-    this.getDifficultWords();
-    if (this.isMode) {
-      this.difficultWords.forEach((key) => {
-        this.searchInfoDifficultWord(key.translation);
-        let word = key.word;
-        let translation = this.result[0];
-        let link = './assets/' + this.result[1];
-        keyValue = `<div class="card-container"><div class="card"><div class="front" style="background-image: url(${link});"><div class="card-header">${word}</div></div><div class="back" style="background-image: url(${link}"><div class="card-header">${translation}</div></div><div class="rotate"></div></div></div>`;
-        this.difficult.insertAdjacentHTML('beforeend', keyValue);
-      });
-      keyValue = '<div class="btns"><button class="btn none">Start game</button></div>';
-      this.difficult.insertAdjacentHTML('beforeend', keyValue);
-      keyValue = '<audio class="audio"></audio>';
-      this.difficult.insertAdjacentHTML('beforeend', keyValue);
-      keyValue = '<audio class="soundEffects"></audio>';
-      this.difficult.insertAdjacentHTML('beforeend', keyValue);
-    } else {
-      this.difficultWords.forEach((key) => {
-        this.searchInfoDifficultWord(key.translation);
-        let word = key.word;
-        let translation = this.result[0];
-        let link = './assets/' + this.result[1];
-        keyValue = `<div class="card-container"><div class="card card-cover"><div class="front" style="background-image: url(${link});"><div class="card-header none">${word}</div></div><div class="back" style="background-image: url(${link}"><div class="card-header none">${translation}</div></div><div class="rotate none"></div></div></div>`;
-        this.difficult.insertAdjacentHTML('beforeend', keyValue);
-      });
-      keyValue = '<div class="btns"><button class="btn">Start game</button></div>';
-      this.difficult.insertAdjacentHTML('beforeend', keyValue);
-      keyValue = '<audio class="audio"></audio>';
-      this.difficult.insertAdjacentHTML('beforeend', keyValue);
-      keyValue = '<audio class="soundEffects"></audio>';
-      this.difficult.insertAdjacentHTML('beforeend', keyValue);
-    }
-
-    this.difficult.addEventListener('click', (event) => this.handlerClick(event));
-    this.difficult.addEventListener('mouseout', (event) => this.handlerMouseout(event));
-    return this.difficult;
-  }
-
-  getDifficultWords() {
-    let bufAllWords = JSON.parse(localStorage.getItem('allWords'));
-    bufAllWords.sort(function (a, b) {
-      if (a.rate < b.rate) {
-        return 1;
-      }
-      if (a.rate > b.rate) {
-        return -1;
-      }
-      return 0;
-    });
-    this.difficultWords = bufAllWords.slice(0, 8);
-    let flag = 0;
-    this.difficultWords.forEach((key, index) => {
-      if (key.rate == 0 && flag == 0) {
-        this.difficultWords = this.difficultWords.slice(0, index);
-        flag = 1;
-      }
-    });
-  }
-
-  searchInfoDifficultWord(translation) {
-    this.result = [];
-    CARDS.forEach((keyCategory, numCategory) => {
-      if (numCategory != 0) {
-        CARDS[numCategory].forEach((key) => {
-          if (key.translation == translation) {
-            this.result[0] = key.translation;
-            this.result[1] = key.image;
-            this.result[2] = key.audioSrc;
-          }
-        });
-      }
-    });
-  }
-
 }

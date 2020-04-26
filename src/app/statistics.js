@@ -8,10 +8,8 @@ export default class Statistics {
   }
 
   render() {
-    document.querySelector('.switch-container').style.display = 'block';
     this.statistics = document.createElement('div');
     this.statistics.classList.add('container');
-    this.hideSwitch();
     this.getAllWords();
     this.getButtons();
     this.table = document.createElement("table");
@@ -206,10 +204,6 @@ export default class Statistics {
     this.statistics.insertAdjacentHTML('afterbegin', keyValue);
     keyValue = '<div class="buttons"><a href="#" id="resetButton" class="buttonStatistics">Reset</a> <a href="#" id="repeatButton" class="buttonStatistics">Repeat difficult words</a></div>';
     this.statistics.insertAdjacentHTML('afterbegin', keyValue);
-  }
-
-  hideSwitch() {
-    document.querySelector('.switch-container').style.display = 'none';
   }
 
   getAllWords() {

@@ -25,14 +25,18 @@ class App {
     this.appcontainer = document.createElement('div');
     this.appcontainer.classList.add('app-container');
 
+    this.container = document.createElement('div');
+    this.container.classList.add('category-container');
+    this.appcontainer.append(this.container);
+
     const header = new Header();
     this.appcontainer.prepend(header.getHeader());
 
     this.root.append(this.appcontainer);
     body.prepend(this.root);
-    this.getStatistics();
 
     this.navigate();
+    this.checkLocalStorage();
   }
 
   addListeners() {
@@ -62,9 +66,9 @@ class App {
   }
 
   removeContainer() {
-    this.container = document.querySelector('.container');
-    if (this.container != null) {
-      this.container.remove();
+    let containerRemove = document.querySelector('.container');
+    if (containerRemove != null) {
+      containerRemove.remove();
     }
   }
 
@@ -74,22 +78,72 @@ class App {
   }
 
   moveToCategories() {
+    this.showSwitch();
     this.categories = new Categories(this.isMode);
-    this.appcontainer.append(this.categories.render());
+    this.container.append(this.categories.render());
   }
 
+
+
   moveToCategory(path) {
+    this.showSwitch();
     if (path == 'difficult') {
+      let arrayCategory = this.getDifficultWords();
       this.category = new Category(this.isMode);
-      this.appcontainer.append(this.category.createDifficult());
+      this.container.append(this.category.render(arrayCategory));
     } else {
       let indexCategory = this.searchIndexCategoryById(path);
+      let arrayCategory = CARDS[indexCategory].slice();
       this.category = new Category(this.isMode);
-      this.appcontainer.append(this.category.render(indexCategory));
+      this.container.append(this.category.render(arrayCategory));
     }
   }
 
+  getDifficultWords() {
+    let bufAllWords = JSON.parse(localStorage.getItem('allWords'));
+    bufAllWords.sort(function (a, b) {
+      if (a.rate < b.rate) {
+        return 1;
+      }
+      if (a.rate > b.rate) {
+        return -1;
+      }
+      return 0;
+    });
+    let difficultWords = bufAllWords.slice(0, 8);
+    let flag = 0;
+    difficultWords.forEach((key, index) => {
+      if (key.rate == 0 && flag == 0) {
+        difficultWords = difficultWords.slice(0, index);
+        flag = 1;
+      }
+    });
+    let updateDifficultWords = [];
+    this.searchCardDifficultWord(difficultWords[0].word);
+    difficultWords.forEach((key) => {
+        console.log(key.word);
+        updateDifficultWords.push(this.searchCardDifficultWord(key.word));
+    });
+
+    return updateDifficultWords;
+  }
+
+  searchCardDifficultWord(word) {
+    let result = {};
+    CARDS.forEach((keyCategory, numCategory) => {
+      if (numCategory != 0) {
+        CARDS[numCategory].forEach((key) => {
+          if (key.word == word) {
+            result = key;
+          }
+        });
+      }
+    });
+    return result;
+  }
+
   moveToStatistics() {
+    this.hideSwitch();
     const statistics = new Statistics();
     this.appcontainer.append(statistics.render());
   }
@@ -109,7 +163,6 @@ class App {
     if (this.isSwitchMode(event)) {
       this.switchMode();
     }
-
   }
 
   isSwitchMode(event) {
@@ -149,10 +202,16 @@ class App {
   }
 
 
+  hideSwitch() {
+    document.querySelector('.switch-container').style.display = 'none';
+  }
+
+  showSwitch() {
+    document.querySelector('.switch-container').style.display = 'block';
+  }
 
 
-
-  getStatistics() {
+  checkLocalStorage() {
     this.allWords = JSON.parse(localStorage.getItem('allWords'));
     if (this.allWords == null) {
       this.createLocalStorage();
@@ -174,10 +233,10 @@ class App {
             ErrorsPlay: 0,
             rate: 0,
           });
-          localStorage.setItem('allWords', JSON.stringify(this.allWords));
         });
       }
     });
+    localStorage.setItem('allWords', JSON.stringify(this.allWords));
   }
 
 }
