@@ -210,8 +210,10 @@ class Page {
 
 
   isClickOnСategories(event) {
-    if (event.target.parentNode.classList.contains('main-card') || event.target.classList.contains('main-card')) {
-      return true;
+    if (event.target.classList.length != 0) {
+      if (event.target.parentNode.classList.contains('main-card') || event.target.classList.contains('main-card')) {
+        return true;
+      }
     }
   }
 
@@ -339,8 +341,10 @@ class Page {
 
 
   isClickOnCard(event) {
-    if ((event.target.parentNode.classList.contains('front') && !event.target.classList.contains('rotate')) || event.target.classList.contains('front')) {
-      return true;
+    if (event.target.classList.length != 0) {
+      if ((event.target.parentNode.classList.contains('front') && !event.target.classList.contains('rotate')) || event.target.classList.contains('front')) {
+        return true;
+      }
     }
   }
 
