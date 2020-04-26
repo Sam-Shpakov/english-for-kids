@@ -293,12 +293,7 @@ export default class Category {
       let audio = document.querySelector('.audio');
       let src = '../assets/audio/failure.mp3';
       audio.setAttribute('src', src);
-      // audio.play();
-      let playPromise = audio.play();
-    if (playPromise !== undefined) {
-      playPromise.then(_ => {})
-      .catch(error => { });
-    }
+      audio.play();
       let cards = document.querySelectorAll('.card');
       for (let i = 0; i < cards.length; i++) {
         cards[i].style.display = 'none';
