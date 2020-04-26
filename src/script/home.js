@@ -235,8 +235,10 @@ class Page {
 
 
   isClickOnMenu(event) {
-    if (event.target.parentNode.classList.contains('header-item') || event.target.classList.contains('header-item')) {
-      return true;
+    if (event.target.classList.length != 0) {
+      if (event.target.parentNode.classList.contains('header-item') || event.target.classList.contains('header-item')) {
+        return true;
+      }
     }
   }
 
@@ -555,25 +557,25 @@ class Page {
       document.querySelector('.switch-container').style.display = 'none';
       setTimeout(() => {
         this.returnToMain();
-      }, 100000);
+      }, 3000);
     } else {
       document.querySelector('.rating').remove();
       let keyValue = `<div class="rating" style="justify-content: center;">${this.numberErrors} Errors</div>`;
       this.container = document.querySelector('.container');
-      let audio = document.querySelector('.audio');
-      audio.setAttribute('src', '../assets/audio/failure.mp3');
-      audio.play();
       this.container.insertAdjacentHTML('beforebegin', keyValue);
       let cards = document.querySelectorAll('.card');
       for (let i = 0; i < cards.length; i++) {
         cards[i].style.display = 'none';
       }
+      let audio = document.querySelector('.audio');
+      audio.setAttribute('src', '../assets/audio/failure.mp3');
+      audio.play();
       document.querySelector('body').classList.add('failure');
       document.querySelector('.btns').style.display = 'none';
       document.querySelector('.switch-container').style.display = 'none';
       setTimeout(() => {
         this.returnToMain();
-      }, 100000);
+      }, 3000);
     }
   }
 
