@@ -36,7 +36,7 @@ class App {
     body.prepend(this.root);
 
     this.navigate();
-    this.checkLocalStorage();
+    this.allWords = this.getWords();
   }
 
   addListeners() {
@@ -218,25 +218,50 @@ class App {
     }
   }
 
-  createLocalStorage() {
-    this.allWords = [];
-    CARDS.forEach((keyCategory, numCategory) => {
-      if (numCategory != 0) {
-        CARDS[numCategory].forEach((key) => {
-          let bufWord = key.word;
-          let translation = key.translation;
-          this.allWords.push({
-            word: bufWord,
-            translation: translation,
-            countTrain: 0,
-            guessPlay: 0,
-            ErrorsPlay: 0,
-            rate: 0,
-          });
-        });
-      }
-    });
-    localStorage.setItem('allWords', JSON.stringify(this.allWords));
+  getWords() {
+    if (!localStorage.getItem('allWords')) {
+      return this.createWords();
+    }
+    return JSON.parse(localStorage.getItem('allWords'));
+  }
+
+  // createLocalStorage() {
+  //   this.allWords = [];
+  //   CARDS.forEach((keyCategory, numCategory) => {
+  //     if (numCategory != 0) {
+  //       CARDS[numCategory].forEach((key) => {
+  //         let bufWord = key.word;
+  //         let translation = key.translation;
+  //         this.allWords.push({
+  //           word: bufWord,
+  //           translation: translation,
+  //           countTrain: 0,
+  //           guessPlay: 0,
+  //           ErrorsPlay: 0,
+  //           rate: 0,
+  //         });
+  //       });
+  //     }
+  //   });
+  //   localStorage.setItem('allWords', JSON.stringify(this.allWords));
+    
+  // }
+
+  createWords() {
+    const words = CARDS
+      .slice(1)
+      .flatMap(category => category.map(({ word, translation }) => ({
+        word,
+        translation,
+        countTrain: 0,
+        guessPlay: 0,
+        ErrorsPlay: 0,
+        rate: 0,
+      })));
+
+    localStorage.setItem('allWords', JSON.stringify(words));
+
+    return words;
   }
 
 }
