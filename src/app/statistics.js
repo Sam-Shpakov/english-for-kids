@@ -123,9 +123,7 @@ export default class Statistics {
   }
 
   isClickOnButtonReset(event) {
-    if (event.target.id == ('resetButton')) {
-      return true;
-    }
+    return event.target.id === 'resetButton';
   }
 
   clickOnButtonReset() {
@@ -137,9 +135,7 @@ export default class Statistics {
   }
 
   isClickOnButtonRepeatDifWord(event) {
-    if (event.target.id == ('repeatButton')) {
-      return true;
-    }
+    return event.target.id === 'repeatButton';
   }
 
   clickOnButtonRepeatDifWord() {
@@ -190,8 +186,9 @@ export default class Statistics {
       a.children[index].innerHTML
     );
 
-    for (const tBody of target.closest('table').tBodies)
+    for (const tBody of target.closest('table').tBodies){
       tBody.append(...[...tBody.rows].sort(comparator(index, order)));
+    }
 
     for (const cell of target.parentNode.cells)
       cell.classList.toggle('sorted', cell === target);

@@ -45,8 +45,7 @@ class App {
   }
 
   navigate() {
-    let path = window.location.hash.slice(1);
-    path = this.parsePath(path);
+    let path = this.parsePath();
     this.removeContainer();
     switch (path[0]) {
       case "": {
@@ -72,7 +71,8 @@ class App {
     }
   }
 
-  parsePath(path) {
+  parsePath() {
+    let path = window.location.hash.slice(1);
     let result = path.split('/');
     return result;
   }
@@ -101,15 +101,7 @@ class App {
 
   getDifficultWords() {
     let bufAllWords = JSON.parse(localStorage.getItem('allWords'));
-    bufAllWords.sort(function (a, b) {
-      if (a.rate < b.rate) {
-        return 1;
-      }
-      if (a.rate > b.rate) {
-        return -1;
-      }
-      return 0;
-    });
+    bufAllWords.sort((a, b) => b.rate - a.rate);
     let difficultWords = bufAllWords.slice(0, 8);
     let flag = 0;
     difficultWords.forEach((key, index) => {
@@ -121,8 +113,7 @@ class App {
     let updateDifficultWords = [];
     this.searchCardDifficultWord(difficultWords[0].word);
     difficultWords.forEach((key) => {
-        console.log(key.word);
-        updateDifficultWords.push(this.searchCardDifficultWord(key.word));
+      updateDifficultWords.push(this.searchCardDifficultWord(key.word));
     });
 
     return updateDifficultWords;
@@ -187,8 +178,7 @@ class App {
 
   searchIndexCategoryByPath() {
     let result = -1;
-    let path = window.location.hash.slice(1);
-    path = this.parsePath(path);
+    let path = this.parsePath();
     if (path.length == 1) {
       result = 0;
     } else {
@@ -229,7 +219,10 @@ class App {
   createWords() {
     const words = CARDS
       .slice(1)
-      .flatMap(category => category.map(({ word, translation }) => ({
+      .flatMap(category => category.map(({
+        word,
+        translation
+      }) => ({
         word,
         translation,
         countTrain: 0,

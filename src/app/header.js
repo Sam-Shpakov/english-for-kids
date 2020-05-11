@@ -66,9 +66,7 @@ export default class Header {
   }
 
   isBlurMenu(event) {
-    if (!event.target.classList.contains('menu') && event.target.tagName !== 'INPUT') {
-      return true;
-    }
+    return !event.target.classList.contains('menu') && event.target.tagName !== 'INPUT';
   }
 
   blurMenu() {
@@ -77,9 +75,8 @@ export default class Header {
 
   isClickOnMenu(event) {
     if (event.target.classList.length != 0) {
-      if (event.target.parentNode.classList.contains('header-item') || event.target.classList.contains('header-item')) {
-        return true;
-      }
+      const { classList, parentNode } = event.target;
+      return classList.length && (classList.contains('header-item') || parentNode.classList.contains('header-item'))
     }
   }
 
