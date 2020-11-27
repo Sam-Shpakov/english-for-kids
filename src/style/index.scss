@@ -1,2 +1,14 @@
-@import 'base/base';
-@import 'base/font';
+@import "abstract/constants";
+
+@import "base/base";
+@import "base/font";
+
+@import "components/menu";
+@import "components/switch";
+@import "components/main-card";
+@import "components/card";
+
+@import "layouts/header";
+@import "layouts/category";
+@import "layouts/rating";
+@import "layouts/statistics";

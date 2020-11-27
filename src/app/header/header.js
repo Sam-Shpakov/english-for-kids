@@ -1,44 +1,52 @@
 import { cards } from "../cards";
 
 export default class Header {
-  getHeader() {
-    this.header = document.createElement("div");
-    this.header.classList.add("header-container");
+  getHeader(switchMode, isMode) {
+    this.switchMode = switchMode;
+    this.isMode = isMode;
+    this.header = this.createDomNode(this.header, "div", "header-container");
+    this.navigation = this.createDomNode(this.navigation, "div", "navigation");
+    this.menuToggle = this.createDomNode(this.menuToggle, "div", "menu-toggle");
+    this.menuCheckbox = this.createDomNode(this.menuCheckbox, "input");
+    this.menuCheckbox.type = "checkbox";
+    this.menuSpan1 = this.createDomNode(this.menuSpan1, "span");
+    this.menuSpan2 = this.createDomNode(this.menuSpan2, "span");
+    this.menuSpan3 = this.createDomNode(this.menuSpan2, "span");
+    this.isMode
+      ? (this.menu = this.createDomNode(this.menu, "ul", "menu", "green"))
+      : (this.menu = this.createDomNode(this.menu, "ul", "menu"));
 
-    this.navigation = document.createElement("nav");
-    this.navigation.classList.add("navigation");
-    this.menuToggle = document.createElement("div");
-    this.menuToggle.classList.add("menuToggle");
+    this.switch = this.createDomNode(this.switch, "div", "switch-container");
+    this.switchLabel = this.createDomNode(this.switchLabel, "label", "switch");
+
+    this.appendMenuElement();
+    this.bindEvents(switchMode);
+
+    return this.header;
+  }
+
+  appendMenuElement() {
     this.navigation.append(this.menuToggle);
-    this.menuCheckbox = document.createElement("input");
-    this.menuCheckbox.setAttribute("type", "checkbox");
     this.menuToggle.append(this.menuCheckbox);
-    this.menuSpan1 = document.createElement("span");
+    this.header.append(this.navigation);
+    this.header.append(this.switch);
     this.menuToggle.append(this.menuSpan1);
-    this.menuSpan2 = document.createElement("span");
     this.menuToggle.append(this.menuSpan2);
-    this.menuSpan3 = document.createElement("span");
     this.menuToggle.append(this.menuSpan3);
-    this.menuUl = document.createElement("ul");
-    this.menuUl.classList.add("menu");
-    this.menuUl.classList.add("green");
-    this.menuToggle.append(this.menuUl);
-    let keyInput = '<a class="header-item active" href="#">Main Page</a>';
-    this.menuUl.insertAdjacentHTML("beforeend", keyInput);
-    cards[0].forEach((key) => {
-      if (key.id != "statistics") {
-        let keyValue = `<a class="header-item" href="#category/${key.id}">${key.name}</a>`;
-        this.menuUl.insertAdjacentHTML("beforeend", keyValue);
+    this.menuToggle.append(this.menu);
+    this.switch.append(this.switchLabel);
+
+    let keyInput = '<a class="menu-item active" href="#">Main Page</a>';
+    this.menu.insertAdjacentHTML("beforeend", keyInput);
+    cards[0].forEach((item) => {
+      if (item.id != "statistics") {
+        const keyValue = `<a class="menu-item" href="#category/${item.id}">${item.name}</a>`;
+        this.menu.insertAdjacentHTML("beforeend", keyValue);
       }
     });
-    keyInput = `<a class="header-item" href="#statistics">Statistics</a>`;
-    this.menuUl.insertAdjacentHTML("beforeend", keyInput);
+    keyInput = `<a class="menu-item" href="#statistics">Statistics</a>`;
+    this.menu.insertAdjacentHTML("beforeend", keyInput);
 
-    this.switch = document.createElement("div");
-    this.switch.classList.add("switch-container");
-    this.switchLabel = document.createElement("label");
-    this.switchLabel.classList.add("switch");
-    this.switch.append(this.switchLabel);
     keyInput = '<input type="checkbox" class="switch-input" checked="">';
     this.switchLabel.insertAdjacentHTML("beforeend", keyInput);
     keyInput =
@@ -46,13 +54,10 @@ export default class Header {
     this.switchLabel.insertAdjacentHTML("beforeend", keyInput);
     keyInput = '<span class="switch-handle"></span>';
     this.switchLabel.insertAdjacentHTML("beforeend", keyInput);
+  }
 
-    this.header.append(this.navigation);
-    this.header.append(this.switch);
-
+  bindEvents() {
     document.addEventListener("click", (event) => this.handlerClick(event));
-
-    return this.header;
   }
 
   handlerClick(event) {
@@ -62,6 +67,11 @@ export default class Header {
 
     if (this.isClickOnMenu(event)) {
       this.clickOnMenu(event);
+    }
+
+    if (this.isSwitchMode(event)) {
+      this.switchMode();
+      this.switchModeInMenu(this.isMode);
     }
   }
 
@@ -73,7 +83,7 @@ export default class Header {
   }
 
   blurMenu() {
-    document.querySelector(".menuToggle>input").checked = false;
+    document.querySelector(".menu-toggle>input").checked = false;
   }
 
   isClickOnMenu(event) {
@@ -81,8 +91,8 @@ export default class Header {
       const { classList, parentNode } = event.target;
       return (
         classList.length &&
-        (classList.contains("header-item") ||
-          parentNode.classList.contains("header-item"))
+        (classList.contains("menu-item") ||
+          parentNode.classList.contains("menu-item"))
       );
     }
   }
@@ -92,10 +102,34 @@ export default class Header {
   }
 
   controlActiveItem(event) {
-    let menuItems = document.querySelectorAll(".header-item");
+    let menuItems = document.querySelectorAll(".menu-item");
     for (let i = 0; i < menuItems.length; i++) {
       menuItems[i].classList.remove("active");
     }
     event.target.classList.add("active");
+  }
+
+  isSwitchMode(event) {
+    if (
+      event.target.closest(".switch-container") &&
+      event.target.tagName !== "INPUT"
+    ) {
+      return true;
+    }
+  }
+
+  switchModeInMenu(isMode) {
+    if (isMode) {
+      this.menu.classList.remove("green");
+    } else {
+      this.menu.classList.add("green");
+    }
+    this.isMode = !this.isMode;
+  }
+
+  createDomNode(node, element, ...classes) {
+    node = document.createElement(element);
+    node.classList.add(...classes);
+    return node;
   }
 }

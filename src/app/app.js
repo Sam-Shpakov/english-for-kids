@@ -1,9 +1,11 @@
-import "../style/index.scss";
 import { cards } from "./cards";
 import { Header } from "./header";
-import { Categories } from "./categories";
+import { renderMainPage } from "./main-page";
 import { Category } from "./category";
 import { Statistics } from "./statistics";
+import { Footer } from "./footer";
+
+import "../style/index.scss";
 
 export default class App {
   constructor() {
@@ -11,30 +13,43 @@ export default class App {
   }
 
   initApp() {
-    const body = document.querySelector("body");
-    this.root = document.createElement("div");
-    this.root.setAttribute("id", "root");
+    this.body = document.querySelector("body");
+    this.root = this.createDomNode(this.root, "div", "root");
+    this.root.id = "root";
 
-    this.appcontainer = document.createElement("div");
-    this.appcontainer.classList.add("app-container");
+    this.appcontainer = this.createDomNode(
+      this.appcontainer,
+      "div",
+      "app-container"
+    );
 
-    this.container = document.createElement("div");
-    this.container.classList.add("category-container");
-    this.appcontainer.append(this.container);
+    this.container = this.createDomNode(
+      this.container,
+      "div",
+      "category-container"
+    );
 
-    const header = new Header();
-    this.appcontainer.prepend(header.getHeader());
-
-    this.root.append(this.appcontainer);
-    body.prepend(this.root);
-
+    this.appendAppElement();
     this.navigate();
     this.allWords = this.getWords();
   }
 
   addListeners() {
-    document.addEventListener("click", (event) => this.handlerClick(event));
     window.addEventListener("hashchange", () => this.navigate());
+  }
+
+  appendAppElement() {
+    this.appcontainer.append(this.container);
+    this.root.append(this.appcontainer);
+    this.body.prepend(this.root);
+
+    const header = new Header();
+    this.appcontainer.prepend(
+      header.getHeader(this.switchMode.bind(this), this.isMode)
+    );
+
+    const footer = new Footer();
+    this.appcontainer.append(footer.getFooter());
   }
 
   navigate() {
@@ -42,7 +57,8 @@ export default class App {
     this.removeContainer();
     switch (path[0]) {
       case "": {
-        this.moveToCategories();
+        this.container.innerHTML = "";
+        this.container.append(renderMainPage(this.isMode));
         break;
       }
       case "category": {
@@ -69,10 +85,9 @@ export default class App {
     return result;
   }
 
-  moveToCategories() {
+  moveToMainPage() {
     this.showSwitch();
-    this.categories = new Categories(this.isMode);
-    this.container.append(this.categories.render());
+    this.container.append(renderMainPage(this.isMode));
   }
 
   moveToCategory(path) {
@@ -139,33 +154,19 @@ export default class App {
     return result;
   }
 
-  handlerClick(event) {
-    if (this.isSwitchMode(event)) {
-      this.switchMode();
-    }
-  }
-
-  isSwitchMode(event) {
-    if (
-      event.target.parentNode.className == "switch" &&
-      event.target.tagName == "SPAN"
-    ) {
-      return true;
-    }
-  }
-
   switchMode() {
-    let indexCategory = this.searchIndexCategoryByPath();
+    const indexCategory = this.searchIndexCategoryByPath();
+    this.isMode = !this.isMode;
     switch (indexCategory) {
       case 0: {
-        this.categories.switchModeInMainPage();
+        this.container.innerHTML = "";
+        this.container.append(renderMainPage(this.isMode));
         break;
       }
       default: {
         this.category.switchModeInCategory();
       }
     }
-    this.isMode = !this.isMode;
   }
 
   searchIndexCategoryByPath() {
@@ -203,6 +204,12 @@ export default class App {
       return this.createWords();
     }
     return JSON.parse(localStorage.getItem("allWords"));
+  }
+
+  createDomNode(node, element, ...classes) {
+    node = document.createElement(element);
+    node.classList.add(...classes);
+    return node;
   }
 
   createWords() {

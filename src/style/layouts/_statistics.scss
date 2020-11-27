@@ -1,0 +1,116 @@
+table {
+  width: 100%;
+  margin: 20px;
+  border-collapse: collapse;
+
+  @media (max-width: $mobile-small-width) {
+    margin: 0;
+  }
+
+  thead tr {
+    color: #ffffff;
+    font-weight: bold;
+    background: linear-gradient(40deg, #00bf82, #0099ae);
+  }
+
+  thead tr th {
+    border: 1px solid #01ab73;
+    font-size: 28px;
+    margin: 2px 2px;
+    text-align: center;
+  }
+
+  tbody tr td {
+    border: 1px solid #e8e9eb;
+    font-size: 19px;
+    text-align: center;
+  }
+
+  @media (max-width: $mobile-small-width) {
+    thead tr th {
+      font-size: 14px;
+    }
+
+    tbody tr td {
+      font-size: 13px;
+    }
+  }
+
+  tbody tr:nth-child(2n) {
+    background: #f4f4f4;
+  }
+
+  tbody tr:hover {
+    background: #ebffe8;
+  }
+
+  .tableTh:hover {
+    cursor: pointer;
+  }
+
+  th.sorted[data-order="-1"]::after {
+    content: "▲";
+  }
+
+  th.sorted[data-order="1"]::after {
+    content: "▼";
+  }
+}
+
+.buttons {
+  margin: 20px;
+
+  @media (max-width: $mobile-small-width) {
+    margin: 10px;
+  }
+
+  a.buttonStatistics {
+    display: inline-block;
+    font-family: arial, sans-serif;
+    font-size: 25px;
+    font-weight: bold;
+    color: rgb(68, 68, 68);
+    text-decoration: none;
+    user-select: none;
+    padding: 0.5px 0.9px;
+    outline: none;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+    background: rgb(245, 245, 245) linear-gradient(#f4f4f4, #f1f1f1);
+    transition: all 0.218s ease 0s;
+    margin: 5px;
+  }
+
+  a.buttonStatistics:hover {
+    color: rgb(24, 24, 24);
+    border: 1px solid rgb(198, 198, 198);
+    background: #f7f7f7 linear-gradient(#f7f7f7, #f1f1f1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  a.buttonStatistics:active {
+    margin: 5px;
+    color: rgb(51, 51, 51);
+    border: 1px solid rgb(204, 204, 204);
+    background: rgb(238, 238, 238)
+      linear-gradient(rgb(238, 238, 238), rgb(224, 224, 224));
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+  }
+
+  a.button {
+    font-size: 14px;
+    padding: 0.1px 0.2px;
+  }
+}
+
+.buf {
+  clear: both;
+  display: block;
+  width: 100%;
+}
+
+.helper {
+  display: block;
+  width: 200px;
+  margin: 5px;
+}
