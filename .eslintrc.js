@@ -1,17 +1,20 @@
 module.exports = {
-    "env": {
-        "browser": true,
-        "node": true,
-        "es6": true
-    },
-    "extends": "eslint:recommended",
-    "globals": {
-        "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
-    },
-    "parserOptions": {
-        "ecmaVersion": 2018,
-        "sourceType": "module"
-    },
-    "rules": {}
+  env: {
+    browser: true,
+    commonjs: false,
+    es6: true,
+    jest: true,
+  },
+  extends: 'airbnb-base',
+  globals: {
+    Atomics: 'readonly',
+    SharedArrayBuffer: 'readonly',
+  },
+  parserOptions: {
+    sourceType: 'module',
+    ecmaVersion: 2018,
+  },
+  rules: {
+    'linebreak-style': 0,
+  },
 };

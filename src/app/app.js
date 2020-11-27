@@ -1,32 +1,25 @@
-import '../style/style.scss';
-import CARDS from './cards.js';
-import Header from './header.js';
-import Categories from './categories.js';
-import Category from './category.js';
-import Statistics from './statistics.js';
-import './cards.js';
+import "../style/index.scss";
+import { cards } from "./cards";
+import { Header } from "./header";
+import { Categories } from "./categories";
+import { Category } from "./category";
+import { Statistics } from "./statistics";
 
-window.onload = () => {
-  const app = new App();
-  app.initApp();
-  app.addListeners();
-};
-
-class App {
+export default class App {
   constructor() {
     this.isMode = true;
   }
 
   initApp() {
-    const body = document.querySelector('body');
-    this.root = document.createElement('div');
-    this.root.setAttribute('id', 'root');
+    const body = document.querySelector("body");
+    this.root = document.createElement("div");
+    this.root.setAttribute("id", "root");
 
-    this.appcontainer = document.createElement('div');
-    this.appcontainer.classList.add('app-container');
+    this.appcontainer = document.createElement("div");
+    this.appcontainer.classList.add("app-container");
 
-    this.container = document.createElement('div');
-    this.container.classList.add('category-container');
+    this.container = document.createElement("div");
+    this.container.classList.add("category-container");
     this.appcontainer.append(this.container);
 
     const header = new Header();
@@ -40,8 +33,8 @@ class App {
   }
 
   addListeners() {
-    document.addEventListener('click', (event) => this.handlerClick(event));
-    window.addEventListener('hashchange', () => this.navigate());
+    document.addEventListener("click", (event) => this.handlerClick(event));
+    window.addEventListener("hashchange", () => this.navigate());
   }
 
   navigate() {
@@ -61,11 +54,10 @@ class App {
         break;
       }
     }
-
   }
 
   removeContainer() {
-    let containerRemove = document.querySelector('.container');
+    let containerRemove = document.querySelector(".container");
     if (containerRemove != null) {
       containerRemove.remove();
     }
@@ -73,7 +65,7 @@ class App {
 
   parsePath() {
     let path = window.location.hash.slice(1);
-    let result = path.split('/');
+    let result = path.split("/");
     return result;
   }
 
@@ -83,24 +75,22 @@ class App {
     this.container.append(this.categories.render());
   }
 
-
-
   moveToCategory(path) {
     this.showSwitch();
-    if (path == 'difficult') {
+    if (path == "difficult") {
       let arrayCategory = this.getDifficultWords();
       this.category = new Category(this.isMode);
       this.container.append(this.category.render(arrayCategory));
     } else {
       let indexCategory = this.searchIndexCategoryById(path);
-      let arrayCategory = CARDS[indexCategory].slice();
+      let arrayCategory = cards[indexCategory].slice();
       this.category = new Category(this.isMode);
       this.container.append(this.category.render(arrayCategory));
     }
   }
 
   getDifficultWords() {
-    let bufAllWords = JSON.parse(localStorage.getItem('allWords'));
+    let bufAllWords = JSON.parse(localStorage.getItem("allWords"));
     bufAllWords.sort((a, b) => b.rate - a.rate);
     let difficultWords = bufAllWords.slice(0, 8);
     let flag = 0;
@@ -121,9 +111,9 @@ class App {
 
   searchCardDifficultWord(word) {
     let result = {};
-    CARDS.forEach((keyCategory, numCategory) => {
+    cards.forEach((keyCategory, numCategory) => {
       if (numCategory != 0) {
-        CARDS[numCategory].forEach((key) => {
+        cards[numCategory].forEach((key) => {
           if (key.word == word) {
             result = key;
           }
@@ -141,14 +131,13 @@ class App {
 
   searchIndexCategoryById(id) {
     let result;
-    CARDS[0].forEach((key, index) => {
+    cards[0].forEach((key, index) => {
       if (key.id == id) {
         result = index + 1;
       }
     });
     return result;
   }
-
 
   handlerClick(event) {
     if (this.isSwitchMode(event)) {
@@ -157,7 +146,10 @@ class App {
   }
 
   isSwitchMode(event) {
-    if (event.target.parentNode.className == 'switch' && event.target.tagName == 'SPAN') {
+    if (
+      event.target.parentNode.className == "switch" &&
+      event.target.tagName == "SPAN"
+    ) {
       return true;
     }
   }
@@ -182,7 +174,7 @@ class App {
     if (path.length == 1) {
       result = 0;
     } else {
-      CARDS[0].forEach((key, index) => {
+      cards[0].forEach((key, index) => {
         if (key.id == path[1]) {
           result = index + 1;
         }
@@ -191,49 +183,42 @@ class App {
     return result;
   }
 
-
   hideSwitch() {
-    document.querySelector('.switch-container').style.display = 'none';
+    document.querySelector(".switch-container").style.display = "none";
   }
 
   showSwitch() {
-    document.querySelector('.switch-container').style.display = 'block';
+    document.querySelector(".switch-container").style.display = "block";
   }
 
-
   checkLocalStorage() {
-    this.allWords = JSON.parse(localStorage.getItem('allWords'));
+    this.allWords = JSON.parse(localStorage.getItem("allWords"));
     if (this.allWords == null) {
       this.createLocalStorage();
     }
   }
 
   getWords() {
-    if (!localStorage.getItem('allWords')) {
+    if (!localStorage.getItem("allWords")) {
       return this.createWords();
     }
-    return JSON.parse(localStorage.getItem('allWords'));
+    return JSON.parse(localStorage.getItem("allWords"));
   }
 
-
   createWords() {
-    const words = CARDS
-      .slice(1)
-      .flatMap(category => category.map(({
-        word,
-        translation
-      }) => ({
+    const words = cards.slice(1).flatMap((category) =>
+      category.map(({ word, translation }) => ({
         word,
         translation,
         countTrain: 0,
         guessPlay: 0,
         ErrorsPlay: 0,
         rate: 0,
-      })));
+      }))
+    );
 
-    localStorage.setItem('allWords', JSON.stringify(words));
+    localStorage.setItem("allWords", JSON.stringify(words));
 
     return words;
   }
-
 }

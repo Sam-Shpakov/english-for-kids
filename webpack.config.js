@@ -1,89 +1,75 @@
-const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin= require('copy-webpack-plugin');
-
+const path = require("path");
+const webpack = require("webpack");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const HTMLWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = (env, options) => {
-  const isProduction = options.mode === 'production';
-
+  const isProduction = options.mode === "production";
+  const isDev = !isProduction;
   const config = {
-    mode: isProduction ? 'production' : 'development',
-    devtool: isProduction ? 'none' : 'source-map',
+    mode: isProduction ? "production" : "development",
+    devtool: isProduction ? "none" : "source-map",
     watch: !isProduction,
     entry: {
-      app: './src/app/app.js',
+      main: ["./src/style/index.scss", "./src/app/index.js"],
     },
     output: {
-      filename: '[name].js',
-      path: path.resolve(__dirname, 'dist')
+      filename: "[name].js",
+      path: path.resolve(__dirname, "dist"),
     },
 
     module: {
-      rules: [{
+      rules: [
+        {
           test: /\.m?js$/,
           exclude: /(node_modules|bower_components)/,
           use: {
-            loader: 'babel-loader',
+            loader: "babel-loader",
             options: {
-              presets: ['@babel/preset-env']
-            }
-          }
+              presets: ["@babel/preset-env"],
+            },
+          },
         },
         {
           test: /\.css$/i,
-          use: ['style-loader', 'css-loader'],
+          use: ["style-loader", "css-loader"],
         },
         {
           test: /\.s[ac]ss$/i,
           use: [
             MiniCssExtractPlugin.loader,
-            'css-loader',
-            'sass-loader',
-          ]
+            "css-loader?url=false",
+            "sass-loader",
+          ],
         },
         {
           test: /\.(png|svg|jpe?g|gif)$/i,
-          use: [{
-            loader: 'file-loader',
-            options: {
-              name: 'img/[name].[ext]',
+          use: [
+            {
+              loader: "file-loader",
             },
-          }, ],
+          ],
         },
-        {
-          test: /\.html$/i,
-          loader: 'html-loader',
-        },
-      ]
-    },
-
-    devServer: {
-      contentBase: path.join(__dirname, 'dist'),
-      compress: true,
-      port: 9000
+      ],
     },
 
     plugins: [
-      new CleanWebpackPlugin(), 
-      new HtmlWebpackPlugin({
-        template: './src/index.html'
+      new CleanWebpackPlugin(),
+      new HTMLWebpackPlugin({
+        template: __dirname + "/src/index.html",
+        filename: "index.html",
+        minify: isProduction,
+        chunks: ["main"],
       }),
-      new CopyWebpackPlugin([{
-        from: './src/assets/img',
-        to: './assets/img'
-      },
-      {
-        from: './src/assets/audio',
-        to: './assets/audio'
-      },
-    ]),
+      new CopyWebpackPlugin([{ from: "./src/assets", to: "assets" }]),
       new MiniCssExtractPlugin({
-        filename: 'style.css',
+        filename: "[name].css",
+        chunkFilename: "[id].css",
       }),
-    ]
-  }
+    ],
+  };
 
   return config;
-}
+};

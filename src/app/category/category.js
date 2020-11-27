@@ -1,4 +1,4 @@
-import CARDS from './cards.js';
+import {cards} from '../cards';
 
 export default class Category {
   constructor(isMode) {
@@ -380,9 +380,9 @@ export default class Category {
 
   searchCardByWord(word) {
     let src = '';
-    CARDS.forEach((keyCategory, numCategory) => {
+    cards.forEach((keyCategory, numCategory) => {
       if (numCategory != 0) {
-        CARDS[numCategory].forEach((key) => {
+        cards[numCategory].forEach((key) => {
           if (key.word == word) {
             src = key.audioSrc;
           }
