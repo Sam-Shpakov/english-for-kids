@@ -1,4 +1,5 @@
 import { cards } from "../cards";
+import { createDomNode } from "../common";
 
 export default function renderMainPage(isMode) {
   const mainPage = createDomNode(
@@ -31,10 +32,4 @@ export default function renderMainPage(isMode) {
     });
   }
   return mainPage;
-}
-
-function createDomNode(node, element, ...classes) {
-  node = document.createElement(element);
-  node.classList.add(...classes);
-  return node;
 }

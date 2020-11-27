@@ -28,7 +28,7 @@ table {
 
   @media (max-width: $mobile-small-width) {
     thead tr th {
-      font-size: 14px;
+      font-size: 13px;
     }
 
     tbody tr td {
@@ -50,10 +50,18 @@ table {
 
   th.sorted[data-order="-1"]::after {
     content: "▲";
+    font-size: 18px;
+    @media (max-width: $mobile-small-width) {
+      font-size: 8px;
+    }
   }
 
   th.sorted[data-order="1"]::after {
     content: "▼";
+    font-size: 18px;
+    @media (max-width: $mobile-small-width) {
+      font-size: 8px;
+    }
   }
 }
 

@@ -13,6 +13,18 @@ body {
   background-position: center 180px;
   overflow-x: hidden;
   font-family: Roboto;
+  height: 100vh;
+}
+
+.root {
+  height: 100vh;
+}
+
+.app-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .succes {

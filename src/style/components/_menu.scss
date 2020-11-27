@@ -92,7 +92,7 @@
   margin: -100px 0 0;
   padding: 125px 50px 50px;
   left: 0px;
-  background: linear-gradient(40deg, #ffd86f, #fc6262);
+  background: $gradient-red;
   list-style-type: none;
   -webkit-font-smoothing: antialiased;
   -webkit-transform-origin: 0 0;
@@ -106,7 +106,7 @@
     -webkit-transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1);
 
   &.green {
-    background: $gradient;
+    background: $gradient-green;
   }
 
   &-item {

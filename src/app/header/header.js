@@ -1,23 +1,24 @@
 import { cards } from "../cards";
+import { createDomNode } from "../common";
 
 export default class Header {
   getHeader(switchMode, isMode) {
     this.switchMode = switchMode;
     this.isMode = isMode;
-    this.header = this.createDomNode(this.header, "div", "header-container");
-    this.navigation = this.createDomNode(this.navigation, "div", "navigation");
-    this.menuToggle = this.createDomNode(this.menuToggle, "div", "menu-toggle");
-    this.menuCheckbox = this.createDomNode(this.menuCheckbox, "input");
+    this.header = createDomNode(this.header, "div", "header-container");
+    this.navigation = createDomNode(this.navigation, "div", "navigation");
+    this.menuToggle = createDomNode(this.menuToggle, "div", "menu-toggle");
+    this.menuCheckbox = createDomNode(this.menuCheckbox, "input");
     this.menuCheckbox.type = "checkbox";
-    this.menuSpan1 = this.createDomNode(this.menuSpan1, "span");
-    this.menuSpan2 = this.createDomNode(this.menuSpan2, "span");
-    this.menuSpan3 = this.createDomNode(this.menuSpan2, "span");
+    this.menuSpan1 = createDomNode(this.menuSpan1, "span");
+    this.menuSpan2 = createDomNode(this.menuSpan2, "span");
+    this.menuSpan3 = createDomNode(this.menuSpan2, "span");
     this.isMode
-      ? (this.menu = this.createDomNode(this.menu, "ul", "menu", "green"))
-      : (this.menu = this.createDomNode(this.menu, "ul", "menu"));
+      ? (this.menu = createDomNode(this.menu, "ul", "menu", "green"))
+      : (this.menu = createDomNode(this.menu, "ul", "menu"));
 
-    this.switch = this.createDomNode(this.switch, "div", "switch-container");
-    this.switchLabel = this.createDomNode(this.switchLabel, "label", "switch");
+    this.switch = createDomNode(this.switch, "div", "switch-container");
+    this.switchLabel = createDomNode(this.switchLabel, "label", "switch");
 
     this.appendMenuElement();
     this.bindEvents(switchMode);
@@ -125,11 +126,5 @@ export default class Header {
       this.menu.classList.add("green");
     }
     this.isMode = !this.isMode;
-  }
-
-  createDomNode(node, element, ...classes) {
-    node = document.createElement(element);
-    node.classList.add(...classes);
-    return node;
   }
 }

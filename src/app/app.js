@@ -1,9 +1,10 @@
 import { cards } from "./cards";
 import { Header } from "./header";
+import { createDomNode } from "./common";
 import { renderMainPage } from "./main-page";
 import { Category } from "./category";
 import { Statistics } from "./statistics";
-import { Footer } from "./footer";
+import { renderFooter } from "./footer";
 
 import "../style/index.scss";
 
@@ -14,21 +15,17 @@ export default class App {
 
   initApp() {
     this.body = document.querySelector("body");
-    this.root = this.createDomNode(this.root, "div", "root");
+    this.root = createDomNode(this.root, "div", "root");
     this.root.id = "root";
 
-    this.appcontainer = this.createDomNode(
+    this.appcontainer = createDomNode(
       this.appcontainer,
       "div",
       "app-container"
     );
 
-    this.container = this.createDomNode(
-      this.container,
-      "div",
-      "category-container"
-    );
-
+    this.container = createDomNode(this.container, "div", "category-container");
+    this.footer = createDomNode(this.footer, "div", "footer-container");
     this.appendAppElement();
     this.navigate();
     this.allWords = this.getWords();
@@ -39,17 +36,15 @@ export default class App {
   }
 
   appendAppElement() {
-    this.appcontainer.append(this.container);
-    this.root.append(this.appcontainer);
-    this.body.prepend(this.root);
-
     const header = new Header();
     this.appcontainer.prepend(
       header.getHeader(this.switchMode.bind(this), this.isMode)
     );
-
-    const footer = new Footer();
-    this.appcontainer.append(footer.getFooter());
+    this.appcontainer.append(this.container);
+    this.appcontainer.append(this.footer);
+    this.footer.append(renderFooter(this.isMode));
+    this.root.append(this.appcontainer);
+    this.body.prepend(this.root);
   }
 
   navigate() {
@@ -58,6 +53,7 @@ export default class App {
     switch (path[0]) {
       case "": {
         this.container.innerHTML = "";
+        this.showSwitch();
         this.container.append(renderMainPage(this.isMode));
         break;
       }
@@ -83,11 +79,6 @@ export default class App {
     let path = window.location.hash.slice(1);
     let result = path.split("/");
     return result;
-  }
-
-  moveToMainPage() {
-    this.showSwitch();
-    this.container.append(renderMainPage(this.isMode));
   }
 
   moveToCategory(path) {
@@ -161,10 +152,14 @@ export default class App {
       case 0: {
         this.container.innerHTML = "";
         this.container.append(renderMainPage(this.isMode));
+        this.footer.innerHTML = "";
+        this.footer.append(renderFooter(this.isMode));
         break;
       }
       default: {
         this.category.switchModeInCategory();
+        this.footer.innerHTML = "";
+        this.footer.append(renderFooter(this.isMode));
       }
     }
   }
@@ -204,12 +199,6 @@ export default class App {
       return this.createWords();
     }
     return JSON.parse(localStorage.getItem("allWords"));
-  }
-
-  createDomNode(node, element, ...classes) {
-    node = document.createElement(element);
-    node.classList.add(...classes);
-    return node;
   }
 
   createWords() {

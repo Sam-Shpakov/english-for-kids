@@ -1,3 +1,3 @@
-import Footer from "./footer";
+import renderFooter from "./footer";
 
-export { Footer };
+export { renderFooter };

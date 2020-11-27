@@ -38,7 +38,7 @@ export default class Statistics {
         headCell = document.createElement("th");
         headCell.classList.add("tableTh");
         headCell.setAttribute("title", "Нажми для сортировки");
-        headCellText = document.createTextNode("Clicks in mode Train");
+        headCellText = document.createTextNode("Clicks in Train");
         headCell.append(headCellText);
         row.append(headCell);
         head.append(row);
@@ -46,7 +46,7 @@ export default class Statistics {
         headCell = document.createElement("th");
         headCell.classList.add("tableTh");
         headCell.setAttribute("title", "Нажми для сортировки");
-        headCellText = document.createTextNode("Guess in mode Play");
+        headCellText = document.createTextNode("Guess in Play");
         headCell.append(headCellText);
         row.append(headCell);
         head.append(row);
@@ -54,7 +54,7 @@ export default class Statistics {
         headCell = document.createElement("th");
         headCell.classList.add("tableTh");
         headCell.setAttribute("title", "Нажми для сортировки");
-        headCellText = document.createTextNode("Errors in mode Play");
+        headCellText = document.createTextNode("Errors in Play");
         headCell.append(headCellText);
         row.append(headCell);
         head.append(row);
