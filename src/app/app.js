@@ -1,9 +1,9 @@
 import { cards } from "./cards";
 import { Header } from "./header";
-import { createDomNode } from "./common";
+import { createDomNode, updateNode } from "./common";
 import { renderMainPage } from "./main-page";
 import { Category } from "./category";
-import { Statistics } from "./statistics";
+import { renderStatistics } from "./statistics";
 import { renderFooter } from "./footer";
 
 import "../style/index.scss";
@@ -11,6 +11,7 @@ import "../style/index.scss";
 export default class App {
   constructor() {
     this.isMode = true;
+    this.category = new Category();
   }
 
   initApp() {
@@ -49,12 +50,9 @@ export default class App {
 
   navigate() {
     let path = this.parsePath();
-    this.removeContainer();
     switch (path[0]) {
       case "": {
-        this.container.innerHTML = "";
-        this.showSwitch();
-        this.container.append(renderMainPage(this.isMode));
+        updateNode(this.container, renderMainPage, this.isMode);
         break;
       }
       case "category": {
@@ -62,16 +60,14 @@ export default class App {
         break;
       }
       case "statistics": {
-        this.moveToStatistics();
+        updateNode(
+          this.container,
+          renderStatistics,
+          this.isMode,
+          this.updateStatistic.bind(this)
+        );
         break;
       }
-    }
-  }
-
-  removeContainer() {
-    let containerRemove = document.querySelector(".container");
-    if (containerRemove != null) {
-      containerRemove.remove();
     }
   }
 
@@ -82,16 +78,18 @@ export default class App {
   }
 
   moveToCategory(path) {
-    this.showSwitch();
-    if (path == "difficult") {
-      let arrayCategory = this.getDifficultWords();
-      this.category = new Category(this.isMode);
-      this.container.append(this.category.render(arrayCategory));
+    if (path === "difficult") {
+      this.arrayCategory = this.getDifficultWords();
+      this.container.innerHTML = "";
+      this.container.append(
+        this.category.render(this.arrayCategory, this.isMode)
+      );
     } else {
-      let indexCategory = this.searchIndexCategoryById(path);
-      let arrayCategory = cards[indexCategory].slice();
-      this.category = new Category(this.isMode);
-      this.container.append(this.category.render(arrayCategory));
+      this.arrayCategory = cards[this.searchIndexCategoryById(path)].slice();
+      this.container.innerHTML = "";
+      this.container.append(
+        this.category.render(this.arrayCategory, this.isMode)
+      );
     }
   }
 
@@ -101,16 +99,18 @@ export default class App {
     let difficultWords = bufAllWords.slice(0, 8);
     let flag = 0;
     difficultWords.forEach((key, index) => {
-      if (key.rate == 0 && flag == 0) {
+      if (key.rate === 0 && flag === 0) {
         difficultWords = difficultWords.slice(0, index);
         flag = 1;
       }
     });
     let updateDifficultWords = [];
-    this.searchCardDifficultWord(difficultWords[0].word);
-    difficultWords.forEach((key) => {
-      updateDifficultWords.push(this.searchCardDifficultWord(key.word));
-    });
+    if (difficultWords.length !== 0) {
+      this.searchCardDifficultWord(difficultWords[0].word);
+      difficultWords.forEach((key) => {
+        updateDifficultWords.push(this.searchCardDifficultWord(key.word));
+      });
+    }
 
     return updateDifficultWords;
   }
@@ -120,7 +120,7 @@ export default class App {
     cards.forEach((keyCategory, numCategory) => {
       if (numCategory != 0) {
         cards[numCategory].forEach((key) => {
-          if (key.word == word) {
+          if (key.word === word) {
             result = key;
           }
         });
@@ -129,16 +129,19 @@ export default class App {
     return result;
   }
 
-  moveToStatistics() {
-    this.hideSwitch();
-    const statistics = new Statistics();
-    this.appcontainer.append(statistics.render());
+  updateStatistic() {
+    updateNode(
+      this.container,
+      renderStatistics,
+      this.isMode,
+      this.updateStatistic.bind(this)
+    );
   }
 
   searchIndexCategoryById(id) {
     let result;
     cards[0].forEach((key, index) => {
-      if (key.id == id) {
+      if (key.id === id) {
         result = index + 1;
       }
     });
@@ -149,29 +152,36 @@ export default class App {
     const indexCategory = this.searchIndexCategoryByPath();
     this.isMode = !this.isMode;
     switch (indexCategory) {
+      case -1: {
+        updateNode(this.container, renderStatistics, this.isMode);
+        updateNode(this.footer, renderFooter, this.isMode);
+        break;
+      }
       case 0: {
-        this.container.innerHTML = "";
-        this.container.append(renderMainPage(this.isMode));
-        this.footer.innerHTML = "";
-        this.footer.append(renderFooter(this.isMode));
+        updateNode(this.container, renderMainPage, this.isMode);
+        updateNode(this.footer, renderFooter, this.isMode);
         break;
       }
       default: {
-        this.category.switchModeInCategory();
-        this.footer.innerHTML = "";
-        this.footer.append(renderFooter(this.isMode));
+        this.container.innerHTML = "";
+        this.container.append(
+          this.category.render(this.arrayCategory, this.isMode)
+        );
+        updateNode(this.footer, renderFooter, this.isMode);
       }
     }
   }
 
   searchIndexCategoryByPath() {
-    let result = -1;
+    let result = -2;
     let path = this.parsePath();
-    if (path.length == 1) {
+    if (path[0] === "statistics") {
+      result = -1;
+    } else if (path.length === 1) {
       result = 0;
     } else {
       cards[0].forEach((key, index) => {
-        if (key.id == path[1]) {
+        if (key.id === path[1]) {
           result = index + 1;
         }
       });
@@ -179,17 +189,9 @@ export default class App {
     return result;
   }
 
-  hideSwitch() {
-    document.querySelector(".switch-container").style.display = "none";
-  }
-
-  showSwitch() {
-    document.querySelector(".switch-container").style.display = "block";
-  }
-
   checkLocalStorage() {
     this.allWords = JSON.parse(localStorage.getItem("allWords"));
-    if (this.allWords == null) {
+    if (this.allWords === null) {
       this.createLocalStorage();
     }
   }

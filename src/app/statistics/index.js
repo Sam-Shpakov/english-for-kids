@@ -1,3 +1,3 @@
-import Statistics from "./statistics";
+import renderStatistics from "./statistics";
 
-export { Statistics };
+export { renderStatistics };

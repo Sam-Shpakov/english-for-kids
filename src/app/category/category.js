@@ -1,50 +1,60 @@
-import {cards} from '../cards';
+import { cards } from "../cards";
+import { createDomNode } from "../common";
 
 export default class Category {
-  constructor(isMode) {
+  render(arrayCategory, isMode) {
+    this.arrayCategory = arrayCategory;
     this.isMode = isMode;
-    this.numberErrors = 0;
+    this.category = createDomNode(this.category, "div", "container");
+
+    this.appendMenuElement();
+    this.bindEvents();
+    return this.category;
   }
 
-  render(arrayCategory) {
-    this.category = document.createElement('div');
-    this.category.classList.add('container');
+  appendMenuElement() {
     let keyValue = '<div class="rating none"></div>';
-    this.category.insertAdjacentHTML('beforeend', keyValue);
-    this.arrayCategory = arrayCategory;
+    this.category.insertAdjacentHTML("beforeend", keyValue);
     if (this.isMode) {
-      arrayCategory.forEach((key) => {
-        let link = './assets/' + key.image;
+      this.arrayCategory.forEach((key) => {
+        let link = "./assets/" + key.image;
         let word = key.word;
         let translation = key.translation;
         keyValue = `<div class="card-container"><div class="card"><div class="front" style="background-image: url(${link});"><div class="card-header">${word}</div></div><div class="back" style="background-image: url(${link}"><div class="card-header">${translation}</div></div><div class="rotate"></div></div></div>`;
-        this.category.insertAdjacentHTML('beforeend', keyValue);
+        this.category.insertAdjacentHTML("beforeend", keyValue);
       });
-      keyValue = '<div class="btns"><button class="btn none">Start game</button></div>';
-      this.category.insertAdjacentHTML('beforeend', keyValue);
+      let keyValue =
+        '<div class="btns"><button class="btn none">Start game</button></div>';
+      this.category.insertAdjacentHTML("beforeend", keyValue);
       keyValue = '<audio class="audio"></audio>';
-      this.category.insertAdjacentHTML('beforeend', keyValue);
+      this.category.insertAdjacentHTML("beforeend", keyValue);
       keyValue = '<audio class="soundEffects"></audio>';
-      this.category.insertAdjacentHTML('beforeend', keyValue);
+      this.category.insertAdjacentHTML("beforeend", keyValue);
     } else {
-      arrayCategory.forEach((key) => {
-        let link = './assets/' + key.image;
+      this.arrayCategory.forEach((key) => {
+        let link = "./assets/" + key.image;
         let word = key.word;
         let translation = key.translation;
         keyValue = `<div class="card-container"><div class="card card-cover"><div class="front" style="background-image: url(${link});"><div class="card-header none">${word}</div></div><div class="back" style="background-image: url(${link}"><div class="card-header none">${translation}</div></div><div class="rotate none"></div></div></div>`;
-        this.category.insertAdjacentHTML('beforeend', keyValue);
+        this.category.insertAdjacentHTML("beforeend", keyValue);
       });
-      keyValue = '<div class="btns"><button class="btn">Start game</button></div>';
-      this.category.insertAdjacentHTML('beforeend', keyValue);
+      let keyValue =
+        '<div class="btns"><button class="btn">Start game</button></div>';
+      this.category.insertAdjacentHTML("beforeend", keyValue);
       keyValue = '<audio class="audio"></audio>';
-      this.category.insertAdjacentHTML('beforeend', keyValue);
+      this.category.insertAdjacentHTML("beforeend", keyValue);
       keyValue = '<audio class="soundEffects"></audio>';
-      this.category.insertAdjacentHTML('beforeend', keyValue);
+      this.category.insertAdjacentHTML("beforeend", keyValue);
     }
+  }
 
-    this.category.addEventListener('click', (event) => this.handlerClick(event));
-    this.category.addEventListener('mouseout', (event) => this.handlerMouseout(event));
-    return this.category;
+  bindEvents() {
+    this.category.addEventListener("click", (event) =>
+      this.handlerClick(event)
+    );
+    this.category.addEventListener("mouseout", (event) =>
+      this.handlerMouseout(event)
+    );
   }
 
   handlerClick(event) {
@@ -59,11 +69,14 @@ export default class Category {
     if (this.isClickOnButtonStartGame(event)) {
       this.clickOnButtonStartGame(event);
     }
-
   }
 
   isClickOnCard(event) {
-    if ((event.target.parentNode.classList.contains('front') && !event.target.classList.contains('rotate')) || event.target.classList.contains('front')) {
+    if (
+      (event.target.parentNode.classList.contains("front") &&
+        !event.target.classList.contains("rotate")) ||
+      event.target.classList.contains("front")
+    ) {
       return true;
     }
   }
@@ -73,20 +86,20 @@ export default class Category {
     if (this.isMode) {
       this.clickOnCardModeTrain(wordClick);
     } else {
-      this.clickOnCardModePlay(wordClick);
+      this.clickOnCardModePlay(event, wordClick);
     }
   }
 
   clickOnCardModeTrain(wordClick) {
     this.addWordInLocalStorageModeTrain(wordClick);
-    let src = 'assets/';
+    let src = "assets/";
     src += this.searchCardByWord(wordClick);
-    let audio = document.querySelector('.audio');
-    audio.setAttribute('src', src);
+    let audio = document.querySelector(".audio");
+    audio.src = src;
     audio.play();
   }
 
-  clickOnCardModePlay(wordClick) {
+  clickOnCardModePlay(event, wordClick) {
     if (this.isStartGame()) {
       if (this.isTrueWord(wordClick)) {
         this.addWordInLocalStorageModePlayGuess(this.trueWord);
@@ -102,205 +115,170 @@ export default class Category {
   }
 
   addWordInLocalStorageModeTrain(addWord) {
-    this.allWords = JSON.parse(localStorage.getItem('allWords'));
-    if (this.allWords == null) {
+    this.allWords = JSON.parse(localStorage.getItem("allWords"));
+    if (this.allWords === null) {
       this.createLocalStorage();
       this.allWords.forEach((key) => {
-        if (key.word == addWord) {
+        if (key.word === addWord) {
           key.countTrain++;
         }
       });
     } else {
       this.allWords.forEach((key) => {
-        if (key.word == addWord) {
+        if (key.word === addWord) {
           key.countTrain++;
         }
       });
     }
-    localStorage.setItem('allWords', JSON.stringify(this.allWords));
+    localStorage.setItem("allWords", JSON.stringify(this.allWords));
   }
 
   addWordInLocalStorageModePlayGuess(addWord) {
-    this.allWords = JSON.parse(localStorage.getItem('allWords'));
-    if (this.allWords == null) {
+    this.allWords = JSON.parse(localStorage.getItem("allWords"));
+    if (this.allWords === null) {
       this.createLocalStorage();
       this.allWords.forEach((key) => {
-        if (key.word == addWord) {
+        if (key.word === addWord) {
           key.guessPlay++;
-          key.rate = Math.floor(key.ErrorsPlay / (key.guessPlay + key.ErrorsPlay) * 100);
+          key.rate = Math.floor(
+            (key.ErrorsPlay / (key.guessPlay + key.ErrorsPlay)) * 100
+          );
         }
       });
     } else {
       this.allWords.forEach((key) => {
-        if (key.word == addWord) {
+        if (key.word === addWord) {
           key.guessPlay++;
-          key.rate = Math.floor(key.ErrorsPlay / (key.guessPlay + key.ErrorsPlay) * 100);
+          key.rate = Math.floor(
+            (key.ErrorsPlay / (key.guessPlay + key.ErrorsPlay)) * 100
+          );
         }
       });
     }
-    localStorage.setItem('allWords', JSON.stringify(this.allWords));
+    localStorage.setItem("allWords", JSON.stringify(this.allWords));
   }
 
   addWordInLocalStorageModePlayError(addWord) {
-    this.allWords = JSON.parse(localStorage.getItem('allWords'));
-    if (this.allWords == null) {
+    this.allWords = JSON.parse(localStorage.getItem("allWords"));
+    if (this.allWords === null) {
       this.createLocalStorage();
       this.allWords.forEach((key) => {
-        if (key.word == addWord) {
+        if (key.word === addWord) {
           key.ErrorsPlay++;
-          key.rate = Math.floor(key.ErrorsPlay / (key.guessPlay + key.ErrorsPlay) * 100);
+          key.rate = Math.floor(
+            (key.ErrorsPlay / (key.guessPlay + key.ErrorsPlay)) * 100
+          );
         }
       });
     } else {
       this.allWords.forEach((key) => {
-        if (key.word == addWord) {
+        if (key.word === addWord) {
           key.ErrorsPlay++;
-          key.rate = Math.floor(key.ErrorsPlay / (key.guessPlay + key.ErrorsPlay) * 100);
+          key.rate = Math.floor(
+            (key.ErrorsPlay / (key.guessPlay + key.ErrorsPlay)) * 100
+          );
         }
       });
     }
-    localStorage.setItem('allWords', JSON.stringify(this.allWords));
+    localStorage.setItem("allWords", JSON.stringify(this.allWords));
   }
 
   isTrueWord(wordClick) {
-    if (this.trueWord == wordClick) {
+    if (this.trueWord === wordClick) {
       return true;
     }
   }
 
   isFinishedWord() {
-    if (this.trueWord == undefined) {
+    if (this.trueWord === undefined) {
       return true;
     }
   }
 
-  switchModeInCategory() {
-    if (this.isMode) {
-      document.querySelector('.switch-input').setAttribute('checked', '');
-      let button = document.querySelector('.btn');
-      button.classList.remove('none');
-      let menu = document.querySelectorAll('.menu');
-      let cards = document.querySelectorAll('.card');
-      document.querySelector('.rating').remove();
-      let keyValue = '<div class="rating"></div>';
-      document.querySelector('.container').insertAdjacentHTML('afterbegin', keyValue);
-      for (let i = 0; i < menu.length; i++) {
-        menu[i].classList.remove('green');
-      }
-      for (let i = 0; i < cards.length; i++) {
-        cards[i].classList.add('card-cover');
-        cards[i].querySelector('.card-header').classList.add('none');
-        cards[i].querySelector('.rotate').classList.add('none');
-      }
-
-    } else {
-      document.querySelector('.switch-input').removeAttribute('checked');
-      let button = document.querySelector('.btn');
-      button.classList.add('none');
-      button.classList.remove('repeat');
-      let front = document.querySelectorAll('.front');
-      for (let i = 0; i < front.length; i++) {
-        front[i].classList.remove('inactive');
-      }
-      document.querySelector('.rating').remove();
-      let keyValue = '<div class="rating none"></div>';
-      document.querySelector('.container').insertAdjacentHTML('afterbegin', keyValue);
-      let menu = document.querySelectorAll('.menu');
-      let cards = document.querySelectorAll('.card');
-      for (let i = 0; i < menu.length; i++) {
-        menu[i].classList.add('green');
-      }
-      for (let i = 0; i < cards.length; i++) {
-        cards[i].classList.remove('card-cover');
-        cards[i].querySelector('.card-header').classList.remove('none');
-        cards[i].querySelector('.rotate').classList.remove('none');
-      }
-    }
-    this.isMode = !this.isMode;
-  }
-
   changeAfterSelectTrueWord() {
-    let src = 'assets/audio/correct.mp3';
-    let audio = document.querySelector('.audio');
-    audio.setAttribute('src', src);
+    let src = "assets/audio/correct.mp3";
+    let audio = document.querySelector(".audio");
+    audio.setAttribute("src", src);
     audio.play();
     this.arrayWordsForGame.shift();
     this.trueWord = this.arrayWordsForGame[0];
     let trueWord = this.trueWord;
-    let newSrc = 'assets/';
+    let newSrc = "assets/";
     newSrc += this.searchCardByWord(trueWord);
     let i = 0;
     audio.onended = function () {
-      if (i == 0) {
-        audio = document.querySelector('.audio');
-        audio.setAttribute('src', newSrc);
+      if (i === 0) {
+        audio = document.querySelector(".audio");
+        audio.setAttribute("src", newSrc);
         audio.play();
         i++;
       }
     };
     this.trueWord = this.arrayWordsForGame[0];
-    event.target.classList.add('inactive');
+    event.target.classList.add("inactive");
     let keyValue = '<div class="star-succes"></div>';
-    document.querySelector('.rating').classList.remove('none');
-    document.querySelector('.rating').insertAdjacentHTML('beforeend', keyValue);
-
+    document.querySelector(".rating").classList.remove("none");
+    document.querySelector(".rating").insertAdjacentHTML("beforeend", keyValue);
   }
 
   changeAfterSelectFailWord(event, wordClick) {
     if (this.checkInactiveCard(event)) {
       this.addWordInLocalStorageModePlayError(wordClick);
-      let src = 'assets/audio/error.mp3';
+      let src = "assets/audio/error.mp3";
       this.numberErrors++;
-      let audio = document.querySelector('.audio');
-      audio.setAttribute('src', src);
+      let audio = document.querySelector(".audio");
+      audio.setAttribute("src", src);
       audio.play();
       let keyValue = '<div class="star-error"></div>';
-      document.querySelector('.rating').classList.remove('none');
-      document.querySelector('.rating').insertAdjacentHTML('beforeend', keyValue);
+      document.querySelector(".rating").classList.remove("none");
+      document
+        .querySelector(".rating")
+        .insertAdjacentHTML("beforeend", keyValue);
     }
   }
 
   checkInactiveCard(event) {
-    if (!event.target.classList.contains('inactive')) {
+    if (!event.target.classList.contains("inactive")) {
       return true;
     }
   }
 
   showResult() {
     if (this.isWin) {
-      document.querySelector('.rating').remove();
-      let keyValue = '<div class="rating" style="justify-content: center;">Win!</div>';
-      this.container = document.querySelector('.container');
-      this.container.insertAdjacentHTML('beforebegin', keyValue);
-      let audio = document.querySelector('.audio');
-      audio.setAttribute('src', '../assets/audio/success.mp3');
+      document.querySelector(".rating").remove();
+      let keyValue =
+        '<div class="rating" style="justify-content: center;">Win!</div>';
+      this.container = document.querySelector(".container");
+      this.container.insertAdjacentHTML("beforebegin", keyValue);
+      let audio = document.querySelector(".audio");
+      audio.setAttribute("src", "../assets/audio/success.mp3");
       audio.play();
-      let cards = document.querySelectorAll('.card');
+      let cards = document.querySelectorAll(".card");
       for (let i = 0; i < cards.length; i++) {
-        cards[i].style.display = 'none';
+        cards[i].style.display = "none";
       }
-      document.querySelector('body').classList.add('succes');
-      document.querySelector('.btns').style.display = 'none';
-      document.querySelector('.switch-container').style.display = 'none';
+      document.querySelector("body").classList.add("succes");
+      document.querySelector(".btns").style.display = "none";
+      document.querySelector(".switch-container").style.display = "none";
       setTimeout(() => {
         this.returnToMain();
       }, 3000);
     } else {
-      document.querySelector('.rating').remove();
+      document.querySelector(".rating").remove();
       let keyValue = `<div class="rating" style="justify-content: center;">${this.numberErrors} Errors</div>`;
-      this.container = document.querySelector('.container');
-      this.container.insertAdjacentHTML('beforebegin', keyValue);
-      let audio = document.querySelector('.audio');
-      let src = '../assets/audio/failure.mp3';
-      audio.setAttribute('src', src);
+      this.container = document.querySelector(".container");
+      this.container.insertAdjacentHTML("beforebegin", keyValue);
+      let audio = document.querySelector(".audio");
+      let src = "../assets/audio/failure.mp3";
+      audio.setAttribute("src", src);
       audio.play();
-      let cards = document.querySelectorAll('.card');
+      let cards = document.querySelectorAll(".card");
       for (let i = 0; i < cards.length; i++) {
-        cards[i].style.display = 'none';
+        cards[i].style.display = "none";
       }
-      document.querySelector('body').classList.add('failure');
-      document.querySelector('.btns').style.display = 'none';
-      document.querySelector('.switch-container').style.display = 'none';
+      document.querySelector("body").classList.add("failure");
+      document.querySelector(".btns").style.display = "none";
+      document.querySelector(".switch-container").style.display = "none";
       setTimeout(() => {
         this.returnToMain();
       }, 3000);
@@ -308,58 +286,54 @@ export default class Category {
   }
 
   returnToMain() {
-    document.querySelector('.rating').remove();
-    document.querySelector('body').classList.remove('succes');
-    document.querySelector('body').classList.remove('failure');
-    document.querySelector('.btns').removeAttribute('style');
-    document.querySelector('.switch-container').removeAttribute('style');
+    document.querySelector(".rating").remove();
+    document.querySelector("body").classList.remove("succes");
+    document.querySelector("body").classList.remove("failure");
+    document.querySelector(".btns").removeAttribute("style");
+    document.querySelector(".switch-container").removeAttribute("style");
     this.container.remove();
-    window.location.hash = '#';
+    window.location.hash = "#";
   }
 
-
-
-
   isClickOnRotate(event) {
-    if (event.target.classList.contains('rotate')) {
+    if (event.target.classList.contains("rotate")) {
       return true;
     }
   }
 
   clickOnRotate(event) {
-    event.target.parentNode.classList.add('translate');
+    event.target.parentNode.classList.add("translate");
   }
 
-
-
   isClickOnButtonStartGame(event) {
-    if (event.target.classList.contains('btn')) {
+    if (event.target.classList.contains("btn")) {
       return true;
     }
   }
 
   clickOnButtonStartGame(event) {
-
-    if (!event.target.classList.contains('repeat')) {
+    if (!event.target.classList.contains("repeat")) {
       this.numberErrors = 0;
-      event.target.classList.add('repeat');
-      if (!document.querySelector('.container').classList.contains('difficult')) {
+      event.target.classList.add("repeat");
+      if (
+        !document.querySelector(".container").classList.contains("difficult")
+      ) {
         this.randomWordsFrom(this.arrayCategory);
       } else {
         this.randomWordsFrom(this.difficultWords);
       }
       this.trueWord = this.arrayWordsForGame[0];
-      let src = 'assets/';
+      let src = "assets/";
       src += this.searchCardByWord(this.trueWord);
-      let audio = document.querySelector('.audio');
-      audio.setAttribute('src', src);
+      let audio = document.querySelector(".audio");
+      audio.setAttribute("src", src);
       audio.play();
       this.isWin = true;
     } else {
-      let src = 'assets/';
+      let src = "assets/";
       src += this.searchCardByWord(this.trueWord);
-      let audio = document.querySelector('.audio');
-      audio.setAttribute('src', src);
+      let audio = document.querySelector(".audio");
+      audio.setAttribute("src", src);
       audio.play();
     }
   }
@@ -373,17 +347,17 @@ export default class Category {
   }
 
   isStartGame() {
-    if (document.querySelector('.btn').classList.contains('repeat')) {
+    if (document.querySelector(".btn").classList.contains("repeat")) {
       return true;
     }
   }
 
   searchCardByWord(word) {
-    let src = '';
+    let src = "";
     cards.forEach((keyCategory, numCategory) => {
       if (numCategory != 0) {
         cards[numCategory].forEach((key) => {
-          if (key.word == word) {
+          if (key.word === word) {
             src = key.audioSrc;
           }
         });
@@ -392,10 +366,6 @@ export default class Category {
     return src;
   }
 
-
-
-
-
   handlerMouseout(event) {
     if (this.isMouseoutCard(event)) {
       this.mouseoutCard();
@@ -403,13 +373,20 @@ export default class Category {
   }
 
   isMouseoutCard(event) {
-    if ((event.target.classList.contains('rotate') && !event.relatedTarget.classList.contains('back')) || event.target.classList.contains('card-container') || event.target.classList.contains('card') || event.target.classList.contains('front') || event.target.classList.contains('back')) {
+    if (
+      (event.target.classList.contains("rotate") &&
+        !event.relatedTarget.classList.contains("back")) ||
+      event.target.classList.contains("card-container") ||
+      event.target.classList.contains("card") ||
+      event.target.classList.contains("front") ||
+      event.target.classList.contains("back")
+    ) {
       return true;
     }
   }
 
   mouseoutCard() {
-    event.target.classList.remove('translate');
-    event.target.parentNode.classList.remove('translate');
+    event.target.classList.remove("translate");
+    event.target.parentNode.classList.remove("translate");
   }
 }

@@ -21,7 +21,7 @@ export default class Header {
     this.switchLabel = createDomNode(this.switchLabel, "label", "switch");
 
     this.appendMenuElement();
-    this.bindEvents(switchMode);
+    this.bindEvents();
 
     return this.header;
   }

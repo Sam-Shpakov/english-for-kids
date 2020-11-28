@@ -1,3 +1,4 @@
-import createDomNode from "./common";
+import { createDomNode } from "./common";
+import { updateNode } from "./common";
 
-export { createDomNode };
+export { createDomNode, updateNode };

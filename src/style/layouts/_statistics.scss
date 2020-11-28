@@ -10,11 +10,19 @@ table {
   thead tr {
     color: #ffffff;
     font-weight: bold;
-    background: linear-gradient(40deg, #00bf82, #0099ae);
+    background: $gradient-red;
+  }
+
+  .green {
+    background: $gradient-green;
+
+    th {
+      border: 1px solid #01ab73;
+    }
   }
 
   thead tr th {
-    border: 1px solid #01ab73;
+    border: 1px solid #ffd86f;
     font-size: 28px;
     margin: 2px 2px;
     text-align: center;
