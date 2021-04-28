@@ -1,17 +1,15 @@
 const path = require("path");
 const webpack = require("webpack");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
+const CopyPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = (env, options) => {
   const isProduction = options.mode === "production";
-  const isDev = !isProduction;
   const config = {
     mode: isProduction ? "production" : "development",
-    devtool: isProduction ? "none" : "source-map",
-    watch: !isProduction,
+    devtool: isProduction ? false : 'source-map',
     entry: {
       main: ["./src/style/index.scss", "./src/app/index.js"],
     },
@@ -63,7 +61,7 @@ module.exports = (env, options) => {
         minify: isProduction,
         chunks: ["main"],
       }),
-      new CopyWebpackPlugin([{ from: "./src/assets", to: "assets" }]),
+      new CopyPlugin({ patterns: [{ from: './src/assets', to: 'assets' }] }),
       new MiniCssExtractPlugin({
         filename: "[name].css",
         chunkFilename: "[id].css",

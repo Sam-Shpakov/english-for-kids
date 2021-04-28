@@ -24,7 +24,11 @@ body {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
+}
+
+.category-container {
+  margin-top: 50px;
 }
 
 .succes {

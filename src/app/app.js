@@ -4,7 +4,6 @@ import { createDomNode, updateNode } from "./common";
 import { renderMainPage } from "./main-page";
 import { Category } from "./category";
 import { renderStatistics } from "./statistics";
-import { renderFooter } from "./footer";
 
 import "../style/index.scss";
 
@@ -26,7 +25,6 @@ export default class App {
     );
 
     this.container = createDomNode(this.container, "div", "category-container");
-    this.footer = createDomNode(this.footer, "div", "footer-container");
     this.appendAppElement();
     this.navigate();
     this.allWords = this.getWords();
@@ -42,8 +40,6 @@ export default class App {
       header.getHeader(this.switchMode.bind(this), this.isMode)
     );
     this.appcontainer.append(this.container);
-    this.appcontainer.append(this.footer);
-    this.footer.append(renderFooter(this.isMode));
     this.root.append(this.appcontainer);
     this.body.prepend(this.root);
   }
@@ -154,12 +150,10 @@ export default class App {
     switch (indexCategory) {
       case -1: {
         updateNode(this.container, renderStatistics, this.isMode);
-        updateNode(this.footer, renderFooter, this.isMode);
         break;
       }
       case 0: {
         updateNode(this.container, renderMainPage, this.isMode);
-        updateNode(this.footer, renderFooter, this.isMode);
         break;
       }
       default: {
@@ -167,7 +161,6 @@ export default class App {
         this.container.append(
           this.category.render(this.arrayCategory, this.isMode)
         );
-        updateNode(this.footer, renderFooter, this.isMode);
       }
     }
   }
