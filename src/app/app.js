@@ -5,8 +5,6 @@ import { renderMainPage } from "./main-page";
 import { Category } from "./category";
 import { renderStatistics } from "./statistics";
 
-import "../style/index.scss";
-
 export default class App {
   constructor() {
     this.isMode = true;
